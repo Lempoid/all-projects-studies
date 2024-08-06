@@ -37,11 +37,13 @@ int StrCmp(const char *string1, const char *string2)
 	while('\0' != *string1)
 	{
 		++count_str1;
+		++string1;
 	}
 	
 	while('\0' != *string2)
 	{
 		++count_str2;
+		++string2;
 	}
 	
 	return count_str1 - count_str2;

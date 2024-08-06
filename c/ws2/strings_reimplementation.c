@@ -1,6 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "strings_reimplementation.h"
+#include <stdio.h> /*printf*/
+#include "strings_reimplementation.h" /*StrLen StrCmp*/
 
 
 int main()
@@ -12,38 +11,31 @@ const char *string3 = "acd";
 return 0;
 }
 
-size_t StrLen(const char *string_to_check_length)
+size_t StrLen(const char *str)
 {
 	size_t count = 0;
-	while(*string_to_check_length != '\0')
+	while(*str != '\0')
 	{
 		count++;
-		string_to_check_length++;
+		str++;
 	}
 	return count;
 }
 
 int StrCmp(const char *string1, const char *string2)
 {
-	size_t string1_size = StrLen(string1);
-	size_t string2_size = StrLen(string2);
+	size_t count_str1 = 0;
+	size_t count_str2 = 0;
 	
-	if(string1_size != string2_size)
+	while(string1 != '\0')
 	{
-		return 0;
-	}
-	else
-	{
-		while(*string1 != '\0')
-			{
-				if(*string1 != *string2)
-				{
-					return 0;
-				}
-				string1++;
-				string2++;
-			}
+		count_str1++;
 	}
 	
-	return 1;
+	while(string2 != '\0')
+	{
+		count_str2++;
+	}
+	
+	return count_str1 - count_str2;
 }

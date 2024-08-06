@@ -29,22 +29,16 @@ size_t StrLen(const char *str)
 
 int StrCmp(const char *string1, const char *string2)
 {
-	size_t count_str1 = 0;
-	size_t count_str2 = 0;
+	//size_t count_str1 = 0;
+	//size_t count_str2 = 0;
 	
 	assert(NULL != string1 && NULL != string2);
 	
-	while('\0' != *string1)
+	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2))
 	{
-		++count_str1;
+		++string2;
 		++string1;
 	}
 	
-	while('\0' != *string2)
-	{
-		++count_str2;
-		++string2;
-	}
-	
-	return count_str1 - count_str2;
+	return (int *) (*string1 - *string2);
 }

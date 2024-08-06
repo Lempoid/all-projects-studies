@@ -1,6 +1,36 @@
-#include "customStrings.h"
 #include <assert.h> /*assert*/
 #include <ctype.h> /*tolower*/
+#include <stdlib.h> /*calloc malloc*/
+#include "customStrings.h"
+
+size_t StrLen(const char *str)
+{
+	size_t count = 0;
+	
+	assert(NULL != str);
+	
+	while('\0' != *str)
+	{
+		++count;
+		++str;
+	}
+	return count;
+}
+
+int StrCmp(const char *string1, const char *string2)
+{
+	
+	assert(NULL != string1 && NULL != string2);
+	
+	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2))
+	{
+		++string2;
+		++string1;
+	}
+	
+	return (int) (*string1 - *string2);
+}
+
 char *StrCpy(char *dst, const char *src)
 {
 	char *runner = dst;
@@ -38,7 +68,7 @@ char *StrNCpy(char *dst, const char *src, size_t dstsize)
 	return (char *)dst;
 }
 
-int StrNCmp(const char *s1, const char *s2, size_t size)
+int StrNCmp(const char *string1, const char *string2, size_t size)
 {
 	size_t counter = 0; 
 	
@@ -51,10 +81,10 @@ int StrNCmp(const char *s1, const char *s2, size_t size)
 		++counter;
 	}
 	
-	return (int *)(*string1 - *string2);
+	return (int)(*string1 - *string2);
 }
 
-int StrCaseCmp(const char *s1, const char *s2)
+int StrCaseCmp(const char *string1, const char *string2)
 {
 	
 	assert(NULL != string1 && NULL != string2);
@@ -65,7 +95,7 @@ int StrCaseCmp(const char *s1, const char *s2)
 		++string1;
 	}
 	
-	return (int *)(*string1 - *string2);
+	return (int)(*string1 - *string2);
 }
 
 char *StrChr(const char *s, int c)
@@ -77,18 +107,19 @@ char *StrChr(const char *s, int c)
 	{
 		++s;
 	}
-	return s;
+	return (char*)s;
 }
 
 
-char *StrDup(const char *s)
+char *StrDup(const char *src)
 {
-	char *dst = (char *)calloc(strlen(s),sizeof(s));
+	
+	char *dst = (char *)calloc(StrLen(src),sizeof(src));
 	char *runner = dst;
 	
-	assert(NULL != dst && NULL != s);
+	assert(NULL != src && NULL != dst);
 	
-	while(*src != '\0')
+	while('\0' != *src)
 	{
 		*runner++ = *src++;
 	}
@@ -101,10 +132,120 @@ char *StrDup(const char *s)
 
 char *StrCat(char *dst, const char *src)
 {
+
+	char *runner = dst + StrLen(dst);
 	
+	assert(NULL != dst && NULL != src);
+		
+	while ('\0' !=  *src) 
+	{
+		*runner++ = *src++;
+	}
+	
+	*runner = '\0';
+	
+	return dst;
 }
 
-char *StrNCat(char *dst, const char *src, size_t srcsize);
-char *StrStr(const char *haystack, const char *needle);
-size_t StrSpn(const char *s, const char *accept);
-char *StrTok(char *str, const char *delim);
+char *StrNCat(char *dst, const char *src, size_t srcsize)
+{
+	
+	char *runner = dst + StrLen(dst);
+		
+	assert(NULL != dst && NULL != src);
+		
+	while ('\0' != *src) 
+	{
+		*runner++ = *src++;
+		--srcsize;
+	}
+	
+	*runner = '\0';
+	
+	return dst;
+}
+
+char *StrStr(const char *haystack, const char *needle)
+{
+	
+	assert(NULL != haystack && NULL != needle);
+	
+	while('\0' != *haystack)
+	{
+		if(0 == StrNCmp(haystack, needle, StrLen(needle)))
+		{
+			return (char*)haystack;
+		}
+		++haystack;
+	}
+	
+	return NULL;
+}
+size_t StrSpn(const char *s, const char *accept)
+{
+	
+	size_t count = 0;
+	
+	assert(NULL != s && NULL != accept);
+	
+	while('\0' != *s)
+	{
+		if(NULL != StrChr(accept, (int)*s))
+		{
+			++count;
+			++s;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	return count;
+}
+char *StrTok(char *str, const char *delim)
+{
+
+	static char *origin_string = NULL;
+	char* return_str = (char*)malloc(sizeof(char) * 1);
+	
+	assert(return_str != NULL && NULL != delim);
+			
+	if(NULL != str)
+	{
+		origin_string = str;
+	}
+	
+	
+	
+	while('\0' != *origin_string)
+	{
+		if(NULL != StrChr(delim, (int)*origin_string))
+		{
+			*origin_string = '\0';
+			if(1 < StrLen(return_str))
+			{
+				++origin_string;
+				break;
+			}
+			else
+			{
+				while(NULL != origin_string && NULL != StrChr(delim, (int)*origin_string))
+				{
+					*origin_string = '\0';
+					++origin_string;
+				}
+			}
+		}
+		else
+		{
+			*(return_str + StrLen(return_str) - 1) = *origin_string;
+			++origin_string;
+		}
+		
+		return_str = (char*)realloc(return_str, sizeof(return_str) * StrLen(return_str) + 1);	
+	}
+		*(return_str + StrLen(return_str) - 1) = '\0';
+		
+		return (char*)return_str;
+}

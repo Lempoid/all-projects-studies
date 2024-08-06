@@ -1,0 +1,7 @@
+void boom(int start, int end)
+	const number = number we boom on
+	for [start to end]
+	check if (number % 7 = 0 or strchr('7'))
+		print(boom)
+	else
+		print(number)

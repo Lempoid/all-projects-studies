@@ -29,8 +29,6 @@ size_t StrLen(const char *str)
 
 int StrCmp(const char *string1, const char *string2)
 {
-	//size_t count_str1 = 0;
-	//size_t count_str2 = 0;
 	
 	assert(NULL != string1 && NULL != string2);
 	

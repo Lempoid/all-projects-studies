@@ -1,7 +1,6 @@
 // Alex Breger
 // Code Review Ben Bortkevich 6.8.24
 
-#include <stdio.h> /*printf*/
 #include "strings_reimplementation.h" /*StrLen StrCmp*/
 #include <assert.h> /*assert*/
 

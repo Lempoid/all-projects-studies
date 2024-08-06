@@ -206,46 +206,29 @@ size_t StrSpn(const char *s, const char *accept)
 char *StrTok(char *str, const char *delim)
 {
 
-	static char *origin_string = NULL;
+	static char* origin_string = NULL;
 	char* return_str = (char*)malloc(sizeof(char) * 1);
-	
 	assert(return_str != NULL && NULL != delim);
 			
 	if(NULL != str)
 	{
 		origin_string = str;
 	}
-	
-	
-	
-	while('\0' != *origin_string)
+
+	while(NULL != StrChr(delim, (int)*origin_string))
 	{
-		if(NULL != StrChr(delim, (int)*origin_string))
-		{
-			*origin_string = '\0';
-			if(1 < StrLen(return_str))
-			{
-				++origin_string;
-				break;
-			}
-			else
-			{
-				while(NULL != origin_string && NULL != StrChr(delim, (int)*origin_string))
-				{
-					*origin_string = '\0';
-					++origin_string;
-				}
-			}
-		}
-		else
-		{
-			*(return_str + StrLen(return_str) - 1) = *origin_string;
-			++origin_string;
-		}
-		
-		return_str = (char*)realloc(return_str, sizeof(return_str) * StrLen(return_str) + 1);	
+		*origin_string = '\0';
+		++origin_string;
 	}
-		*(return_str + StrLen(return_str) - 1) = '\0';
-		
-		return (char*)return_str;
+	
+	while(NULL != origin_string && NULL == StrChr(delim, (int)*origin_string))
+	{
+		*(return_str + StrLen(return_str) - 1) = *origin_string;
+		return_str = (char*)realloc(return_str, sizeof(return_str) * StrLen(return_str) + 1);
+	}
+	
+	*(return_str + StrLen(return_str) - 1) = '\0';
+	
+	return return_str; /*How to free it?*/
+	
 }

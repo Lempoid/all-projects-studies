@@ -1,3 +1,9 @@
+/*
+Alex Breger
+Reviewed by: Ben 7.8.24
+*/
+
+
 #include <ctype.h>
 #include <string.h>
 #include <assert.h>
@@ -14,7 +20,7 @@ int IsPali(const char *str)
 	
 	while(start < end)
 	{
-		if(tolower(*start) != tolower(*end))
+		if(*start != *end)
 		{
 			return 0;
 		}
@@ -24,5 +30,6 @@ int IsPali(const char *str)
 			--end;
 		}
 	}
+	
 	return 1;
 }

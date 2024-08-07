@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed by: Ben 7.8.24
+*/
+
 #include <assert.h> /*assert*/
 #include <ctype.h> /*tolower*/
 #include <stdlib.h> /*calloc malloc*/
@@ -14,7 +19,7 @@ size_t StrLen(const char *str)
 		++count;
 		++str;
 	}
-	return count;
+	return (size_t) count;
 }
 
 int StrCmp(const char *string1, const char *string2)
@@ -39,7 +44,7 @@ char *StrCpy(char *dst, const char *src)
 	
 	while(*src != '\0')
 	{
-		*runner++=*src++;
+		*runner++ = *src++;
 	}
 	*runner = '\0';
 	return (char *)dst;
@@ -81,7 +86,7 @@ int StrNCmp(const char *string1, const char *string2, size_t size)
 		--size;
 	}
 	
-	return (int)(*string1 - *string2);
+	return (int)(*string1 - *string2);	
 }
 
 int StrCaseCmp(const char *string1, const char *string2)
@@ -220,13 +225,17 @@ char *StrTok(char *str, const char *delim)
 
 	static char* origin_string = NULL;
 	
-	assert(NULL != delim);
-			
+	char *string_to_run = calloc(strlen(str), sizeof(*str));
+	
+	assert(NULL != delim && NULL != string_to_run);
+		
 	if(NULL != str)
 	{
 		origin_string = str;
 	}
-
+	
+	
+	
 	while(NULL != StrChr(delim, (char)*origin_string))
 	{
 		*origin_string = '\0';

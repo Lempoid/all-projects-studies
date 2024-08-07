@@ -52,9 +52,10 @@ char *StrNCpy(char *dst, const char *src, size_t dstsize)
 	
 	assert(NULL != dst && NULL != src);
 	
-	while(*src != '\0')
+	while(*src != '\0' && counter < dstsize)
 	{
 		*runner++ = *src++;
+		++counter;
 	}
 	
 	while(counter < dstsize)
@@ -74,7 +75,7 @@ int StrNCmp(const char *string1, const char *string2, size_t size)
 	
 	assert(NULL != string1 && NULL != string2);
 	
-	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2) && counter <= size)
+	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2) && (counter <= size))
 	{
 		++string2;
 		++string1;
@@ -107,6 +108,7 @@ char *StrChr(const char *s, int c)
 	{
 		++s;
 	}
+	
 	return (char*)s;
 }
 

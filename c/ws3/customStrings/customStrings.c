@@ -219,8 +219,6 @@ char *StrTok(char *str, const char *delim)
 {
 
 	static char* origin_string = NULL;
-	/*char* return_str = (char*)malloc(sizeof(char) * 1);*/
-	char* return_str = NULL;
 	
 	assert(NULL != delim);
 			
@@ -236,14 +234,14 @@ char *StrTok(char *str, const char *delim)
 		++str;
 	}
 	
-	while(NULL != origin_string && NULL == StrChr(delim, (int)*origin_string))
+	while(('\0' != *origin_string) && (NULL == StrChr(delim, (char)*origin_string)))
 	{
-		*(return_str + StrLen(return_str) - 1) = *origin_string;
-		return_str = (char*)realloc(return_str, sizeof(return_str) * StrLen(return_str) + 1);
+		*(str) = *origin_string;
+		++origin_string;
+		++str;
 	}
 	
-	*(return_str + StrLen(return_str) - 1) = '\0';
+	*str = '\0';
 	
-	return (char*)return_str; /*How to free it?*/
-	
+	return (char*)str;	
 }

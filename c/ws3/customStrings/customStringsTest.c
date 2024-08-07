@@ -5,9 +5,9 @@
 int main()
 {
 
-	char StrCpy1[20] = "C programming";
-  	char StrCpy2[50];
-  	
+	char StrCpy1[50] = "   Cawdaw programming";
+  	char StrCpy2[50] = "Cawdaw programming";
+  	char strtok1[50] = "   Cawdaw programming";
 	printf("StrCmp: %d\n",StrCmp("abc","abc"));
 	printf("StrCmp: %d\n",StrCmp("ABCDE","ab"));
 	printf("StrCmp: %d\n",StrCmp("awdawd","aw"));
@@ -30,8 +30,8 @@ int main()
 	printf("StrNCat: %s\n",StrNCat(StrCpy2,StrCpy1,(size_t) 3));
 	printf("StrStr: %s\n",StrStr("awkawd","aw"));
 	printf("StrSpn: %lu\n",StrSpn("aw1kawd","a"));
-	printf("StrTok: %s\n",StrTok(StrCpy1," "));
-	printf("StrTokH: %s\n",strtok(StrCpy1," "));
+	printf("StrTok:%s\n",StrTok(StrCpy1," "));
+	printf("StrTokH:%s\n",strtok(strtok1," "));
 /*
 char *StrTok(char *str, const char *delim);
 */	

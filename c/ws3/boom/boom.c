@@ -1,6 +1,5 @@
 #include <stdio.h> /*printf*/
 #include <string.h> /*strchr*/
-#include <stdlib.h> /*itoa*/
 #include "boom.h"
 
 

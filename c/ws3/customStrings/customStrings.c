@@ -71,15 +71,14 @@ char *StrNCpy(char *dst, const char *src, size_t dstsize)
 
 int StrNCmp(const char *string1, const char *string2, size_t size)
 {
-	size_t counter = 0; 
 	
 	assert(NULL != string1 && NULL != string2);
 	
-	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2) && (counter <= size))
+	while( (*string1 == *string2) && (0 < size - 1) && ('\0' != *string1 && '\0' != *string2))
 	{
 		++string2;
 		++string1;
-		++counter;
+		--size;
 	}
 	
 	return (int)(*string1 - *string2);
@@ -107,6 +106,11 @@ char *StrChr(const char *s, int c)
 	while(c != *s && '\0' != *s)
 	{
 		++s;
+	}
+	
+	if('\0' == *s)
+	{
+		return NULL;
 	}
 	
 	return (char*)s;
@@ -146,7 +150,7 @@ char *StrCat(char *dst, const char *src)
 	
 	*runner = '\0';
 	
-	return dst;
+	return (char*)dst;
 }
 
 char *StrNCat(char *dst, const char *src, size_t srcsize)
@@ -156,7 +160,7 @@ char *StrNCat(char *dst, const char *src, size_t srcsize)
 		
 	assert(NULL != dst && NULL != src);
 		
-	while ('\0' != *src) 
+	while ('\0' != *src && 0 < srcsize) 
 	{
 		*runner++ = *src++;
 		--srcsize;
@@ -164,13 +168,18 @@ char *StrNCat(char *dst, const char *src, size_t srcsize)
 	
 	*runner = '\0';
 	
-	return dst;
+	return (char*)dst;
 }
 
 char *StrStr(const char *haystack, const char *needle)
 {
 	
 	assert(NULL != haystack && NULL != needle);
+	
+	if('\0' == *needle)
+	{
+		return (char*)haystack;
+	}
 	
 	while('\0' != *haystack)
 	{
@@ -203,24 +212,28 @@ size_t StrSpn(const char *s, const char *accept)
 		}
 	}
 	
-	return count;
+	return (size_t)count;
 }
+
 char *StrTok(char *str, const char *delim)
 {
 
 	static char* origin_string = NULL;
-	char* return_str = (char*)malloc(sizeof(char) * 1);
-	assert(return_str != NULL && NULL != delim);
+	/*char* return_str = (char*)malloc(sizeof(char) * 1);*/
+	char* return_str = NULL;
+	
+	assert(NULL != delim);
 			
 	if(NULL != str)
 	{
 		origin_string = str;
 	}
 
-	while(NULL != StrChr(delim, (int)*origin_string))
+	while(NULL != StrChr(delim, (char)*origin_string))
 	{
 		*origin_string = '\0';
 		++origin_string;
+		++str;
 	}
 	
 	while(NULL != origin_string && NULL == StrChr(delim, (int)*origin_string))
@@ -231,6 +244,6 @@ char *StrTok(char *str, const char *delim)
 	
 	*(return_str + StrLen(return_str) - 1) = '\0';
 	
-	return return_str; /*How to free it?*/
+	return (char*)return_str; /*How to free it?*/
 	
 }

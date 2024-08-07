@@ -1,15 +1,16 @@
 #include <stdio.h> /*printf*/
+#include <string.h>
 #include "customStrings.h"
 
 int main()
 {
 
 	char StrCpy1[20] = "C programming";
-  	char StrCpy2[20];
+  	char StrCpy2[50];
   	
 	printf("StrCmp: %d\n",StrCmp("abc","abc"));
 	printf("StrCmp: %d\n",StrCmp("ABCDE","ab"));
-	printf("StrCmp: %d\n",StrCmp("abcd","abc"));
+	printf("StrCmp: %d\n",StrCmp("awdawd","aw"));
 	printf("StrCmp: %d\n",StrCmp("abc","abck"));
 	printf("StrCmp: %d\n",StrCmp("abc",""));
 	
@@ -20,18 +21,18 @@ int main()
 	printf("StrCpy: %s\n",StrCpy(StrCpy2,StrCpy1));
 	printf("StrNCpy: %s\n",StrNCpy(StrCpy2,StrCpy1, (size_t)3));
 	
-	printf("StrNCmp: %d\n",StrNCmp("abc","abck", (size_t)2));
+	printf("StrNCmp: %d\n",StrNCmp("awkawd","aw", (size_t)2));
 	printf("StrCaseCmp: %d\n",StrCaseCmp("Abc","abcD"));
 	printf("StrChr: %s\n",StrChr("abcdf",'b'));
+	printf("StrChr: %s\n",StrChr("abcdf",'\0'));
 	printf("StrDup: %s\n",StrDup("ABCD"));
-		
-
+	printf("StrCat: %s\n",StrCat(StrCpy2,StrCpy1));
+	printf("StrNCat: %s\n",StrNCat(StrCpy2,StrCpy1,(size_t) 3));
+	printf("StrStr: %s\n",StrStr("awkawd","aw"));
+	printf("StrSpn: %lu\n",StrSpn("aw1kawd","a"));
+	printf("StrTok: %s\n",StrTok(StrCpy1," "));
+	printf("StrTokH: %s\n",strtok(StrCpy1," "));
 /*
-char *StrDup(const char *s);
-char *StrCat(char *dst, const char *src);
-char *StrNCat(char *dst, const char *src, size_t srcsize);
-char *StrStr(const char *haystack, const char *needle);
-size_t StrSpn(const char *s, const char *accept);
 char *StrTok(char *str, const char *delim);
 */	
 	return 0;

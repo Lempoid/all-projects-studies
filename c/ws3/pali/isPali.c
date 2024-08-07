@@ -23,6 +23,6 @@ int IsPali(const char *str)
 			++start;
 			--end;
 		}
-		return 1;
 	}
+	return 1;
 }

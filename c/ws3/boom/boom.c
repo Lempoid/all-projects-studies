@@ -1,11 +1,12 @@
 #include <stdio.h> /*printf*/
 #include <string.h> /*strchr*/
+#include <stdlib.h> /*itoa*/
 #include "boom.h"
 
 
 void boom(int const start, int const end)
 {
-	const int NUMBER_TO_BOOM = 7;
+	const char TO_BOOM_ON = '7';
 	char int_to_string[12]; /* Max int number*/
 	int i;
 	
@@ -13,13 +14,13 @@ void boom(int const start, int const end)
 	{
 		sprintf(int_to_string,"%d",i);
 		
-		if((0 != i % NUMBER_TO_BOOM) && (strchr(int_to_string,(char)NUMBER_TO_BOOM) != NULL))
+		if((0 != i % (TO_BOOM_ON - 0)) && NULL == (strchr(int_to_string, TO_BOOM_ON)))
 		{
-			printf("%d", i);
+			printf("%d\n", i);
 		}
 		else
 		{
-			printf("BOOM");
+			printf("%d: BOOM\n", i);
 		}
 	}
 }

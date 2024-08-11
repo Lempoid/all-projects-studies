@@ -5,8 +5,6 @@
 #include <assert.h> /*assert*/
 #include "count_env_vars.h"
 
-extern char **environ;
-
 size_t CountEnvVars(char** env_vars)
 {
 	size_t count = 0;

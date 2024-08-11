@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich 11.8.24
+*/
+
 #include "josephus.h"
 
 int Josephus(int const NUMBER_OF_PEOPLE, int const KILL) 

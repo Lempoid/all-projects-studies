@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich 11.8.24
+*/
+
 #include <stdio.h> /*printf*/
 #include "josephus.h"
 

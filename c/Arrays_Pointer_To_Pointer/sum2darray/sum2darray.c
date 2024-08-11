@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich
+*/
+
 #include "sum2darray.h" /*Sum2D*/
 
 void Sum2D(int array2d[][2], size_t row, size_t col, int result[])

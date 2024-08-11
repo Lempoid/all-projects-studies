@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich
+*/
+
 #ifndef __SUM2DARRAY_H__
 #define __SUM2DARRAY_H__
 #include <stddef.h> /*size_t*/

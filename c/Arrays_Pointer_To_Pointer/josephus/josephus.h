@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich
+*/
+
 #ifndef __JOSEPHUS_H__
 #define __JOSEPHUS_H__
 

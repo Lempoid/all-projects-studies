@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich 11.8.24
+*/
+
 #ifndef __COUNTENVVARS_H__
 #define __COUNTENVVARS_H__
 #include <stddef.h> /*size_t*/

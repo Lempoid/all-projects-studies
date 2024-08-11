@@ -8,7 +8,7 @@ Review: Ben Bortkevich 11.8.24
 
 int main()
 {
-	int const NUMBER_OF_PEOPLE = 100;
+	int const NUMBER_OF_PEOPLE = 97;
     int const KILL = 2;
     int last_person;
 

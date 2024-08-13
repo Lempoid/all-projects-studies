@@ -8,8 +8,8 @@ Review: Ben Bortkevich 11.8.24
 
 int main()
 {
-	int const NUMBER_OF_PEOPLE = 97;
-    int const KILL = 2;
+	int const NUMBER_OF_PEOPLE = 1000;
+    int const KILL = 1;
     int last_person;
 
     last_person = Josephus(NUMBER_OF_PEOPLE, KILL);

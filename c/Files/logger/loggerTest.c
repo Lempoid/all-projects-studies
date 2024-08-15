@@ -1,25 +1,25 @@
 #include <string.h>
 #include "logger.h"
+#include "responsibility.h"
 
-#define BUFFER_SIZE = 256
-#define FILE_NAME_SIZE = 50
-#define SPECIAL_COMMAND_SIZE = 20
+static enum Err{ERROR, SUCCESS, NO_FILE};
+
 int main(int argc, char const *argv[])
 {
+	int BUFFER_SIZE = 256
+	int FILE_NAME_SIZE = 50
+	int SPECIAL_COMMAND_SIZE = 20
+
 	char buffer[BUFFER_SIZE];
+	char* bufferPtr;
 	int i;
+	int flag = SUCCESS;
 	const char fileName[FILE_NAME_SIZE];
-	struct responsibility
-	{
-		char* stringToCompare;
-		int (*CompareFunction)(char*, char*);
-		void (*OperationFunction)();
-	}
 
 	if(2 > argc)
 	{
 		printf("You need to provide a file name <path/file>, rerun the program as <program_name path/file>\n");
-		return 0;
+		return SUCCESS;
 	}
 
 	for (int i = 0; i < argc; ++i)
@@ -27,6 +27,51 @@ int main(int argc, char const *argv[])
 		const char* fileName = argv[1];
 	}	
 	
+	while(flag == SUCCESS)
+	{
+		bufferPtr = GetUserInput(fileName);
+		if(CheckSpecialCommand(bufferPtr))
+		{
+
+		}
+
+	}
+
+
+	free(bufferPtr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
 	do
 	{
 		printf("Enter a string to append to a file");
@@ -44,18 +89,15 @@ int main(int argc, char const *argv[])
 		{
 			AppendToBeginning(fileName, buffer, BUFFER_SIZE);
 		}
-		}
 		else if ("-exit" != buffer)
 		{
-			return 0;
-		}
+			return SUCCESS;
 		}
 		else
 		{
 			AppendStrings(fileName, buffer, BUFFER_SIZE);
 		}
-
 	}while (!strcmp(buffer,"-exit");
-	
+	*/
 	return 0;
 }

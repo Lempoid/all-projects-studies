@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "logger.h"
 
 void CloseFile(FILE* file)
@@ -9,10 +10,10 @@ FILE* OpenFile(const char* nameOfFile, const char* mode)
 {
 	char* filePointer = fopen(nameOfFile, mode);
 	
-	if(!filePtr)
+	if(!filePointer)
 	{
 		printf("FileOpening failed.");
-		return NULL;
+		return ERROR;
 	}
 
 	return filePointer;
@@ -43,9 +44,20 @@ void PrintNumberOfLines(const char* nameOfFile)
 	CloseFile(filePtr);
 }
 
-void AppendToBeginning(const char* nameOfFile, char* buffer, size_t sizeOfBuffer)
+void AppendToBeginning(const char* nameOfFile)
 {
-	buffer = buffer + 1;
+	char byteToRead;
+
+	FILE* originalFile = OpenFile(nameOfFile,"rb");
+	FILE* tmpFile = OpenFile("tmpFile","ab");
+
+	while(!feof(originalFile))
+	{
+		fread(&byteToRead, sizeof(char), 1, originalFile);
+		fwrite(&byteToRead, sizeof(char), 1, tmpFile);
+	}
+	
+	/*buffer = buffer + 1;
 	sizeOfBuffer = sizeOfBuffer - 1;
 	size_t originalFileSize;
 	char* bufferOrignalFile;
@@ -65,14 +77,44 @@ void AppendToBeginning(const char* nameOfFile, char* buffer, size_t sizeOfBuffer
 	fputs(bufferOriginalFile,filePtr);
 	CloseFile(filePtr);
 
-	free(bufferOriginalFile);
+	free(bufferOriginalFile);*/
+}
+
+void AppendStrings(const char* nameOfFile)
+{
+	FILE* filePtr = OpenFile(nameOfFile, "a");
+	const char* userInput = GetUserInput;
+	fprintf(filePtr, userInput);
+	CloseFile(filePtr);
+}
+
+char* GetUserInput(const char* nameOfFile)
+{
+	const char* buffer = NULL;
+	size_t bufSize = 0;
+	size_t size = 0;
+
+	printf("Enter a string to append to a file");
+	getline(&buffer, &bufSize, stdin);
+	if (size < 0)
+	{
+		printf("Can't allocate memory for user input");
+
+	}
+	if(!buffer)
+	{
+		printf("Can't allocate memory for user input");
+		return NULL;
+	}
+	return buffer;
+}
+
+int CheckSpecialCommand(const char* stringToCheck)
+{
 
 }
 
-void AppendStrings(const char* nameOfFile,char* buffer, size_t sizeOfBuffer)
+int Exit()
 {
-	FILE* filePtr = OpenFile(nameOfFile, "a");
-	fgets(buffer, sizeOfBuffer, stdin);
-	fprintf(filePtr, *buffer);
-	CloseFile(filePtr);
+	
 }

@@ -2,11 +2,19 @@
 #define __LOGGER_H__
 #include <stdio.h> /*FILES*/
 
-void CloseFile(const char* nameOfFile);
+int CloseFile(const char* nameOfFile);
 FILE* OpenFile(const char* nameOfFile, const char* mode);
-void RemoveFile(const char* nameOfFile);
-void PrintNumberOfLines(const char* nameOfFile);
+int RemoveFile(const char* nameOfFile);
+int PrintNumberOfLines(const char* nameOfFile);
 /*void Exit();*/
-void AppendToBeginning(const char* nameOfFile, const char* buffer, size_t sizeOfBuffer;
-void AppendStrings(const char* nameOfFile, const char* buffer);
+int AppendToBeginning(const char* nameOfFile, const char* buffer, size_t sizeOfBuffer;
+int AppendStrings(const char* nameOfFile, const char* buffer);
+char* GetUserInput();
+int CheckSpecialCommand(const char* stringToCheck);
+int Exit();
+
+
+extern int BUFFER_SIZE = 256
+extern int FILE_NAME_SIZE = 50
+extern int SPECIAL_COMMAND_SIZE = 20
 #endif /*__LOGGER_H__*/

@@ -1,35 +1,30 @@
+#include <string.h>/*strcmp*/
 #include "logger.h"
 #include "responsibility.h"
 
-void Chain(const char* specialCommand)
+
+OpResult Chain(const char* specialCommand, CommandHandler* handler, size_t handlerSize, const char* fileName)
 {
-	size_t sizeOfArray = 5;
-	struct responsibility chainOfCommands[] = 
+	size_t i = 0;
+
+	for (i = 0; i < handlerSize; ++i)
 	{
-		{"-remove", CompareCommands, RemoveFile},
-		{"-count", CompareCommands, PrintNumberOfLines}, 
-		{"-exit",CompareCommands, Exit}, 
-		{"<", CompareCommands, AppendToBeginning}
+		if(handler[i].CompareFunction(specialCommand, handler[i].stringToCompare))
+		{
+			return handler[i].OperationFunction(fileName);
+		}
 	}
-	
-	for (int i = 0; i < sizeOfArray; ++i)
-	{
-		chainOfCommands
-	}
+
+	return AppendStrings(fileName);
 }
 
+
 int CompareCommands(const char* userInput, const char* specialCommand)
-{
-	int result;
-
-	if(!strstr(userInput,specialCommand))
+{	
+	if(0 == strcmp("<", userInput[0]))
 	{
-		result = ERROR;
-	}
-	else
-	{
-		result = SUCCESS;
+		return "<" == userInput[0];
 	}
 
-	return result;
+	return(0 == strcmp(userInput, specialCommand));
 }

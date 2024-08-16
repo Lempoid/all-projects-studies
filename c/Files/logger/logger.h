@@ -2,19 +2,28 @@
 #define __LOGGER_H__
 #include <stdio.h> /*FILES*/
 
-int CloseFile(const char* nameOfFile);
+typedef enum 
+{
+	ERROR, 
+	SUCCESS, 
+	NO_FILE,
+	FILE_ERROR,
+	MEM_ERROR
+} ErrCode;
+
+ErrCode CloseFile(FILE* nameOfFile);
 FILE* OpenFile(const char* nameOfFile, const char* mode);
-int RemoveFile(const char* nameOfFile);
-int PrintNumberOfLines(const char* nameOfFile);
+ErrCode RemoveFile(const char* nameOfFile);
+ErrCode PrintNumberOfLines(const char* nameOfFile);
 /*void Exit();*/
-int AppendToBeginning(const char* nameOfFile, const char* buffer, size_t sizeOfBuffer;
-int AppendStrings(const char* nameOfFile, const char* buffer);
+ErrCode AppendToBeginning(const char* nameOfFile);
+ErrCode AppendStrings(const char* nameOfFile);
 char* GetUserInput();
-int CheckSpecialCommand(const char* stringToCheck);
-int Exit();
+ErrCode CheckSpecialCommand(const char* stringToCheck);
+ErrCode Exit();
 
 
-extern int BUFFER_SIZE = 256
-extern int FILE_NAME_SIZE = 50
-extern int SPECIAL_COMMAND_SIZE = 20
+/*#define BUFFER_SIZE
+#define FILE_NAME_SIZE
+#define SPECIAL_COMMAND_SIZE*/
 #endif /*__LOGGER_H__*/

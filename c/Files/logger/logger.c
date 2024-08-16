@@ -1,55 +1,85 @@
-#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "logger.h"
 
-void CloseFile(FILE* file)
+ErrCode CloseFile(FILE* file)
 {
-	fclose(file);
+	ErrCode errorResult = SUCCESS;
+	
+	if(0 != fclose(file))
+	{
+		perror("Error closing file.\n");
+		errorResult =  FILE_ERROR;
+	}
+	
+	return errorResult;
 }
 
 FILE* OpenFile(const char* nameOfFile, const char* mode)
 {
-	char* filePointer = fopen(nameOfFile, mode);
+	FILE* filePointer = fopen(nameOfFile, mode);
 	
 	if(!filePointer)
 	{
-		printf("FileOpening failed.");
-		return ERROR;
+		perror("File Opening failed.\n");
 	}
 
 	return filePointer;
 }
 
-void RemoveFile(const char* nameOfFile)
+ErrCode RemoveFile(const char* nameOfFile)
 {
-	/*FILE* filePtr = OpenFile(nameOfFile, "r");
-	CloseFile(filePtr);*/
-	unlink(nameOfFile);
+	ErrCode errorResult = SUCCESS;
+
+	if(0 != remove(nameOfFile))
+	{
+		perror("File removal failed.\n")
+		errorResult = FILE_ERROR;
+	}
+
+	return errorResult;
 }
 
-void PrintNumberOfLines(const char* nameOfFile)
+ErrCode PrintNumberOfLines(const char* nameOfFile)
 {
-	size_t count;
+	size_t count = 0;
 	char c;
-	FILE* filePtr = OpenFile(nameOfFile, "r");
-	while(!feof(filePtr))
+	FILE* filePointer = OpenFile(nameOfFile, "r");
+
+	if(NULL == filePointer)
 	{
-		c = fgetc(filePtr);
+		return FILE_ERROR;
+	}
+
+	do
+	{
+		c = fgetc(filePointer);
+		
 		if('\n' == c)
 		{
 			++count;
 		}
-	}
 
-	printf("The number of lines is: %d", count);
-	CloseFile(filePtr);
+	}while(!feof(filePointer));
+
+	printf("The number of lines is: %ul", count);
+
+	return CloseFile(filePointer);
 }
 
-void AppendToBeginning(const char* nameOfFile)
+ErrCode AppendToBeginning(const char* nameOfFile)
 {
 	char byteToRead;
+	char* userInput;
 
 	FILE* originalFile = OpenFile(nameOfFile,"rb");
 	FILE* tmpFile = OpenFile("tmpFile","ab");
+
+	if(NULL == originalFile || NULL == tmpFile)
+	{
+		perror("Can't open the files in AppendToBeginning");
+		return FILE_ERROR;
+	}
 
 	while(!feof(originalFile))
 	{
@@ -57,64 +87,93 @@ void AppendToBeginning(const char* nameOfFile)
 		fwrite(&byteToRead, sizeof(char), 1, tmpFile);
 	}
 	
-	/*buffer = buffer + 1;
-	sizeOfBuffer = sizeOfBuffer - 1;
-	size_t originalFileSize;
-	char* bufferOrignalFile;
-	FILE* filePtr = OpenFile(nameOfFile, "r");
+	CloseFile(originalFile);
+	CloseFile(tmpFile);
 	
-	fseek(filePtr, 0, SEEK_END);
-	originalFileSize = ftell(filePtr);
-	fseek(filePtr, 0, SEEK_SET);
+	originalFile = OpenFile(nameOfFile, "wb");
+	if(NULL == originalFile)
+	{
+		return FILE_ERROR;
+	}
 
-	bufferOriginalFile = malloc(originalFileSize + 1);
-	fread(bufferOriginalFile,1,originalFileSize,filePtr);
-	bufferOriginalFile[originalFileSize] = '\0';
-	CloseFile(filePtr);
+	userInput = GetUserInput();
+	if(NULL == userInput)
+	{
+		CloseFile(originalFile);
+		return MEM_ERROR;
+	}
 
-	filePtr = OpenFile(nameOfFile, "w");
-	fputs(buffer,filePtr);
-	fputs(bufferOriginalFile,filePtr);
-	CloseFile(filePtr);
+	fwrite(userInput, sizeof(char), strlen(userInput), originalFile);
+	fwrite("\n", sizeof(char), 1, originalFile);
 
-	free(bufferOriginalFile);*/
+	tmpFile = OpenFile("tmpFile","rb");
+	if(NULL == tmpFile)
+	{
+		free(userInput);
+		CloseFile(originalFile);
+		return FILE_ERROR;
+	}
+	
+	while(!feof(tmpFile))
+	{
+		fread(&byteToRead, sizeof(char), 1, tmpFile);
+		fwrite(&byteToRead, sizeof(char), 1, originalFile);
+	}
+
+	CloseFile(originalFile);
+	CloseFile(tmpFile);
+	RemoveFile(tmpFile);
+	free(userInput);
+
+	return SUCCESS;
+	
 }
 
-void AppendStrings(const char* nameOfFile)
+ErrCode AppendStrings(const char* nameOfFile)
 {
-	FILE* filePtr = OpenFile(nameOfFile, "a");
 	const char* userInput = GetUserInput;
-	fprintf(filePtr, userInput);
-	CloseFile(filePtr);
+	FILE* filePointer = OpenFile(nameOfFile, "a");
+
+	if(NULL == userInput)
+	{
+		return MEM_ERROR;
+	}
+
+	if(NULL == filePointer)
+	{
+		free(userInput);
+		return FILE_ERROR;
+	}
+
+	fwrite(userInput, sizeof(char), strlen(userInput), filePointer);
+	fwrite("\n", sizeof(char), 1, filePointer)
+	CloseFile(filePointer);
 }
 
-char* GetUserInput(const char* nameOfFile)
+char* GetUserInput()
 {
-	const char* buffer = NULL;
+	char* buffer = NULL;
 	size_t bufSize = 0;
-	size_t size = 0;
+	ssize_t size = 0;
 
 	printf("Enter a string to append to a file");
-	getline(&buffer, &bufSize, stdin);
+	size = getline(&buffer, &bufSize, stdin);
 	if (size < 0)
 	{
-		printf("Can't allocate memory for user input");
-
-	}
-	if(!buffer)
-	{
-		printf("Can't allocate memory for user input");
+		perror("Can't allocate memory for user input");
+		free(buffer)
 		return NULL;
 	}
+	buffer[size - 1] = '\0';
 	return buffer;
 }
 
-int CheckSpecialCommand(const char* stringToCheck)
+ErrCode CheckSpecialCommand(const char* stringToCheck)
 {
 
 }
 
-int Exit()
+ErrCode Exit()
 {
-	
+	return SUCCESS;
 }

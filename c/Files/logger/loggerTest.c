@@ -2,102 +2,49 @@
 #include "logger.h"
 #include "responsibility.h"
 
-static enum Err{ERROR, SUCCESS, NO_FILE};
-
 int main(int argc, char const *argv[])
 {
-	int BUFFER_SIZE = 256
-	int FILE_NAME_SIZE = 50
-	int SPECIAL_COMMAND_SIZE = 20
-
-	char buffer[BUFFER_SIZE];
-	char* bufferPtr;
-	int i;
-	int flag = SUCCESS;
-	const char fileName[FILE_NAME_SIZE];
-
+	const char* fileName;
+	size_t sizeOfArray = 4;
+	char* userInput;
+	OpResult resultFromHandler;
+	struct responsibility chainOfCommands[] = 
+	{
+		{"-remove", CompareCommands, RemoveFile},
+		{"-count", CompareCommands, PrintNumberOfLines}, 
+		{"-exit",CompareCommands, Exit}, 
+		{"<", CompareCommands, AppendToBeginning}
+	}
+	
 	if(2 > argc)
 	{
-		printf("You need to provide a file name <path/file>, rerun the program as <program_name path/file>\n");
-		return SUCCESS;
+		printf("You need to provide a file name <path/file>, rerun the program as %s <file name path>\n", argv[0]);
+		return ERROR;
 	}
 
-	for (int i = 0; i < argc; ++i)
-	{
-		const char* fileName = argv[1];
-	}	
-	
-	while(flag == SUCCESS)
-	{
-		bufferPtr = GetUserInput(fileName);
-		if(CheckSpecialCommand(bufferPtr))
-		{
+	fileName = argv[1];
 
+	while(1)
+	{
+		userInput = GetUserInput();
+		if(NULL == userInput)
+		{
+			return MEM_ERROR;
+		}
+
+		resultFromHandler = Chain(userInput, chainOfCommands, sizeOfArray, fileName);
+		free(userInput);
+
+		if(OPERATION_EXIT == resultFromHandler)
+		{
+			break;
+		}
+		else if(OPERATION_FAILURE == resultFromHandler)
+		{
+			printf("Error occured during operation handling");
 		}
 
 	}
 
-
-	free(bufferPtr)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/*
-	do
-	{
-		printf("Enter a string to append to a file");
-		scanf("%s",&buffer);
-		
-		if("-remove" != buffer)
-		{
-			RemoveFile(fileName);
-		}
-		else if("-count" != buffer)
-		{
-			PrintNumberOfLines(fileName);
-		} 
-		else if(!= buffer) "<" == buffer[0]
-		{
-			AppendToBeginning(fileName, buffer, BUFFER_SIZE);
-		}
-		else if ("-exit" != buffer)
-		{
-			return SUCCESS;
-		}
-		else
-		{
-			AppendStrings(fileName, buffer, BUFFER_SIZE);
-		}
-	}while (!strcmp(buffer,"-exit");
-	*/
-	return 0;
+	return SUCCESS;
 }

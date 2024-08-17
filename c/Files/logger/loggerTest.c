@@ -1,20 +1,21 @@
-#include <string.h>
+#include <stdlib.h> /*free*/
+#include <stdio.h> /*Printf*/
 #include "logger.h"
 #include "responsibility.h"
+#include "userData.h"
 
 int main(int argc, char const *argv[])
 {
-	const char* fileName;
+	UserData userData;
 	size_t sizeOfArray = 4;
-	char* userInput;
 	OpResult resultFromHandler;
-	struct responsibility chainOfCommands[] = 
+	CommandHandler chainOfCommands[] = 
 	{
 		{"-remove", CompareCommands, RemoveFile},
 		{"-count", CompareCommands, PrintNumberOfLines}, 
 		{"-exit",CompareCommands, Exit}, 
 		{"<", CompareCommands, AppendToBeginning}
-	}
+	};
 	
 	if(2 > argc)
 	{
@@ -22,27 +23,30 @@ int main(int argc, char const *argv[])
 		return ERROR;
 	}
 
-	fileName = argv[1];
+	userData.fileName = argv[1];
 
 	while(1)
 	{
-		userInput = GetUserInput();
-		if(NULL == userInput)
+		userData.userInput = GetUserInput();
+		if(NULL == userData.userInput)
 		{
 			return MEM_ERROR;
 		}
 
-		resultFromHandler = Chain(userInput, chainOfCommands, sizeOfArray, fileName);
-		free(userInput);
+		resultFromHandler = Chain(chainOfCommands, sizeOfArray, &userData);
+
+		if(OPERATION_FAILURE == resultFromHandler)
+		{
+			AppendStrings(&userData);
+		}
+
+		free((char*)userData.userInput);
 
 		if(OPERATION_EXIT == resultFromHandler)
 		{
 			break;
 		}
-		else if(OPERATION_FAILURE == resultFromHandler)
-		{
-			printf("Error occured during operation handling");
-		}
+		
 
 	}
 

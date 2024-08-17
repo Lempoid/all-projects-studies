@@ -1,6 +1,8 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 #include <stdio.h> /*FILES*/
+#include "userData.h"
+#include "responsibility.h"
 
 typedef enum 
 {
@@ -13,14 +15,13 @@ typedef enum
 
 ErrCode CloseFile(FILE* nameOfFile);
 FILE* OpenFile(const char* nameOfFile, const char* mode);
-ErrCode RemoveFile(const char* nameOfFile);
-ErrCode PrintNumberOfLines(const char* nameOfFile);
-/*void Exit();*/
-ErrCode AppendToBeginning(const char* nameOfFile);
-ErrCode AppendStrings(const char* nameOfFile);
+OpResult RemoveFile(UserData* userData);
+OpResult PrintNumberOfLines(UserData* userData);
+OpResult AppendToBeginning(UserData* userData);
+ErrCode AppendStrings(UserData* userData);
 char* GetUserInput();
 ErrCode CheckSpecialCommand(const char* stringToCheck);
-ErrCode Exit();
+OpResult Exit(UserData* userData);
 
 
 /*#define BUFFER_SIZE

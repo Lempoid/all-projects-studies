@@ -76,7 +76,6 @@ OpResult PrintNumberOfLines(UserData* userData)
 OpResult AppendToBeginning(UserData* userData)
 {
 	char byteToRead;
-	UserData tmpUserData;
 
 	FILE* originalFile = OpenFile(userData->fileName,"rb");
 	FILE* tmpFile = OpenFile("tmpFile","ab");
@@ -95,8 +94,8 @@ OpResult AppendToBeginning(UserData* userData)
 		return OPERATION_FILE_ERROR;
 	}
 
-	fwrite(userData->userInput, sizeof(char), strlen(userData->userInput), originalFile);
-	fwrite("\n", sizeof(char), 1, originalFile);
+	fwrite(userData->userInput + 1, sizeof(char), strlen(userData->userInput) - 1, tmpFile);
+	fwrite("\n", sizeof(char), 1, tmpFile);
 
 	while(!feof(originalFile))
 	{
@@ -106,19 +105,10 @@ OpResult AppendToBeginning(UserData* userData)
 	
 	CloseFile(originalFile);
 	CloseFile(tmpFile);
-	
-    if (RemoveFile(userData) != OPERATION_SUCCESS) 
-    {
-        return OPERATION_FILE_ERROR;
-    }
 
-    if (rename("tmpFile", userData->fileName) != 0) 
-    {
-        perror("Failed to rename the temporary file");
-        tmpUserData.fileName = "tmpFile";
-        RemoveFile(&tmpUserData);
-        return OPERATION_FILE_ERROR;
-    }
+	remove(userData->fileName);
+
+	rename("tmpFile", userData->fileName);
 
     return OPERATION_SUCCESS;
 	

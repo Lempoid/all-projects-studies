@@ -11,10 +11,10 @@ int main(int argc, char const *argv[])
 	OpResult resultFromHandler;
 	CommandHandler chainOfCommands[] = 
 	{
+		{"<", CompareCommands, AppendToBeginning},
+		{"-count", CompareCommands, PrintNumberOfLines},
 		{"-remove", CompareCommands, RemoveFile},
-		{"-count", CompareCommands, PrintNumberOfLines}, 
-		{"-exit",CompareCommands, Exit}, 
-		{"<", CompareCommands, AppendToBeginning}
+		{"-exit",CompareCommands, Exit} 		
 	};
 	
 	if(2 > argc)

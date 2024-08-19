@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich 19.8.24
+*/
+
 #include <string.h>/*strcmp*/
 #include "logger.h"
 #include "responsibility.h"

@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Review: Ben Bortkevich 19.8.24
+*/
+
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 #include <stdio.h> /*FILES*/

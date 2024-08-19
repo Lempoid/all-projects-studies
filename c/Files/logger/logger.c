@@ -1,7 +1,11 @@
-#include <stddef.h> /*size_t*/
-#include <string.h>
-#include <stdlib.h> /*free*/
-#include <stdio.h> /*getline*/
+/*
+Alex Breger
+Review: Ben Bortkevich 19.8.24
+*/
+
+#include <string.h> /*fclose fopen*/
+#include <stdlib.h> /*free size_t*/
+#include <stdio.h> /*getline perror printf fread fwrite*/
 #include "logger.h"
 #include "userData.h"
 #include "responsibility.h"

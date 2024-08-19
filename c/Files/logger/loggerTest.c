@@ -1,5 +1,10 @@
-#include <stdlib.h> /*free*/
-#include <stdio.h> /*Printf*/
+/*
+Alex Breger
+Review: Ben Bortkevich 19.8.24
+*/
+
+#include <stdlib.h> /*free* size_t*/
+#include <stdio.h> /*printf*/
 #include "logger.h"
 #include "responsibility.h"
 #include "userData.h"

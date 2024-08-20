@@ -1,4 +1,9 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 19.8.24
+*/
+
+#include <stdio.h> /*printf*/
 long Pow2(unsigned int x, unsigned int y);
 
 int main()
@@ -11,7 +16,6 @@ int main()
 	return 0;
 }
 
-/*x*(2^y)*/
 long Pow2(unsigned int x, unsigned int y)
 {
 	return x << y;	

@@ -1,19 +1,20 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 19.8.24
+*/
+
+#include <stdio.h> /*printf*/
 
 int main()
 {
-	float x = 3.14;
+	float x = 8.6;
 	int i = 0;
 	unsigned int* p = (unsigned int*) &x;
-
     for (i = 31; i >= 0; i--) 
     {
-        printf("%d", (*p >> i) & 1);
-        if (i % 4 == 0) 
-        {
-            printf(" ");
-        }
+        printf("%u", (*p >> i) & 1);
     }
+
     printf("\n");
 
 	return 0;

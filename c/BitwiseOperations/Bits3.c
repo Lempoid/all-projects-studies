@@ -1,4 +1,9 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 19.8.24
+*/
+
+#include <stdio.h> /*printf*/
 
 int main()
 {
@@ -15,16 +20,21 @@ int main()
 		while(arr[i])
 		{
 			if(arr[i] & 1)
-				{
-					++count;
-				}
+			{
+				++count;
+			}
+			
 			arr[i] >>= 1;
+			
+			if(3 == count)
+			{
+				printf("%d\n", tmp);
+				break;
+			}
+		
 		}
 
-		if(3 == count)
-		{
-			printf("%d\n", tmp);
-		}
+		
 	}
 
 	return 0;

@@ -1,4 +1,9 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 19.8.24
+*/
+
+#include <stdio.h> /*printf*/
 
 unsigned int IsPow2(unsigned int x);
 unsigned int IsPow2Loop(unsigned int x);

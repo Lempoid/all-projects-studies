@@ -1,4 +1,9 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 19.8.24
+*/
+
+#include <stdio.h> /*printf*/
 
 void ByteMirror(unsigned x);
 void ByteMirrorLoop(unsigned x);
@@ -25,8 +30,9 @@ void ByteMirror(unsigned x)
 void ByteMirrorLoop(unsigned x)
 {
 	unsigned tmp = 0;
-	int i = 0;
-	for (i = 0; i < 32; i++)
+	int i;
+	
+    for (i = 0; i < 32; i++)
     {
         tmp <<= 1;
         tmp |= (x & 1);

@@ -38,9 +38,7 @@ int SwapBits(unsigned char c)
 	bit2 = bit2 >> 2;
 	tmp = bit1 | bit2;
 
-	c = c & 0x14;
+	c = c & ~0x14;
 
-	c = c | tmp;
-
-	return tmp;
+	return c | tmp;
 }

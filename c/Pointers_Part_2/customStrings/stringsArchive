@@ -1,0 +1,321 @@
+!<arch>
+//                                              22        `
+customStringsTest.c/
+
+customStrings.c/0           0     0     644     3684      `
+/*
+Alex Breger
+Reviewed by: Ben 7.8.24
+*/
+
+#include <assert.h> /*assert*/
+#include <ctype.h> /*tolower*/
+#include <stdlib.h> /*calloc malloc*/
+#include "customStrings.h"
+
+size_t StrLen(const char *str)
+{
+	size_t count = 0;
+	
+	assert(NULL != str);
+	
+	while('\0' != *str)
+	{
+		++count;
+		++str;
+	}
+	return (size_t) count;
+}
+
+int StrCmp(const char *string1, const char *string2)
+{
+	
+	assert(NULL != string1 && NULL != string2);
+	
+	while( (*string1 == *string2) && ('\0' != *string1 && '\0' != *string2))
+	{
+		++string2;
+		++string1;
+	}
+	
+	return (int) (*string1 - *string2);
+}
+
+char *StrCpy(char *dst, const char *src)
+{
+	char *runner = dst;
+	
+	assert(NULL != dst && NULL != src);
+	
+	while(*src != '\0')
+	{
+		*runner++ = *src++;
+	}
+	*runner = '\0';
+	return (char *)dst;
+}
+
+char *StrNCpy(char *dst, const char *src, size_t dstsize)
+{
+	char *runner = dst;
+	size_t counter = 0;
+	
+	assert(NULL != dst && NULL != src);
+	
+	while(*src != '\0' && counter < dstsize)
+	{
+		*runner++ = *src++;
+		++counter;
+	}
+	
+	while(counter < dstsize)
+	{
+		*runner++ = '\0';
+		++counter;
+	}
+	
+	*runner = '\0';
+	
+	return (char *)dst;
+}
+
+int StrNCmp(const char *string1, const char *string2, size_t size)
+{
+	
+	assert(NULL != string1 && NULL != string2);
+	
+	while( (*string1 == *string2) && (0 < size - 1) && ('\0' != *string1 && '\0' != *string2))
+	{
+		++string2;
+		++string1;
+		--size;
+	}
+	
+	return (int)(*string1 - *string2);	
+}
+
+int StrCaseCmp(const char *string1, const char *string2)
+{
+	
+	assert(NULL != string1 && NULL != string2);
+	
+	while( (tolower(*string1) == tolower(*string2)) && ('\0' != *string1 && '\0' != *string2))
+	{
+		++string2;
+		++string1;
+	}
+	
+	return (int)(*string1 - *string2);
+}
+
+char *StrChr(const char *s, int c)
+{
+	
+	assert(NULL != s);
+	
+	while(c != *s && '\0' != *s)
+	{
+		++s;
+	}
+	
+	if('\0' == *s)
+	{
+		return NULL;
+	}
+	
+	return (char*)s;
+}
+
+
+char *StrDup(const char *src)
+{
+	
+	char *dst = (char *)calloc(StrLen(src),sizeof(src));
+	char *runner = dst;
+	
+	assert(NULL != src && NULL != dst);
+	
+	while('\0' != *src)
+	{
+		*runner++ = *src++;
+	}
+	
+	*runner = '\0';
+	
+	return (char *)dst;
+	
+}
+
+char *StrCat(char *dst, const char *src)
+{
+
+	char *runner = dst + StrLen(dst);
+	
+	assert(NULL != dst && NULL != src);
+		
+	while ('\0' !=  *src) 
+	{
+		*runner++ = *src++;
+	}
+	
+	*runner = '\0';
+	
+	return (char*)dst;
+}
+
+char *StrNCat(char *dst, const char *src, size_t srcsize)
+{
+	
+	char *runner = dst + StrLen(dst);
+		
+	assert(NULL != dst && NULL != src);
+		
+	while ('\0' != *src && 0 < srcsize) 
+	{
+		*runner++ = *src++;
+		--srcsize;
+	}
+	
+	*runner = '\0';
+	
+	return (char*)dst;
+}
+
+char *StrStr(const char *haystack, const char *needle)
+{
+	
+	assert(NULL != haystack && NULL != needle);
+	
+	if('\0' == *needle)
+	{
+		return (char*)haystack;
+	}
+	
+	while('\0' != *haystack)
+	{
+		if(0 == StrNCmp(haystack, needle, StrLen(needle)))
+		{
+			return (char*)haystack;
+		}
+		++haystack;
+	}
+	
+	return NULL;
+}
+size_t StrSpn(const char *s, const char *accept)
+{
+	
+	size_t count = 0;
+	
+	assert(NULL != s && NULL != accept);
+	
+	while('\0' != *s)
+	{
+		if(NULL != StrChr(accept, (int)*s))
+		{
+			++count;
+			++s;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	return (size_t)count;
+}
+
+char *StrTok(char *str, const char *delim)
+{
+
+	static char* origin_string = NULL;
+	
+	char *string_to_run = calloc(strlen(str), sizeof(*str));
+	
+	assert(NULL != delim && NULL != string_to_run);
+		
+	if(NULL != str)
+	{
+		origin_string = str;
+	}
+	
+	
+	
+	while(NULL != StrChr(delim, (char)*origin_string))
+	{
+		*origin_string = '\0';
+		++origin_string;
+		++str;
+	}
+	
+	while(('\0' != *origin_string) && (NULL == StrChr(delim, (char)*origin_string)))
+	{
+		*(str) = *origin_string;
+		++origin_string;
+		++str;
+	}
+	
+	*str = '\0';
+	
+	return (char*)str;	
+}
+/0              0           0     0     644     1302      `
+#include <stdio.h> /*printf*/
+#include <string.h>
+#include "customStrings.h"
+
+int main()
+{
+
+	char StrCpy1[50] = "   Cawdaw programming";
+  	char StrCpy2[50] = "Cawdaw programming";
+  	char strtok1[50] = "   Cawdaw programming";
+	printf("StrCmp: %d\n",StrCmp("abc","abc"));
+	printf("StrCmp: %d\n",StrCmp("ABCDE","ab"));
+	printf("StrCmp: %d\n",StrCmp("awdawd","aw"));
+	printf("StrCmp: %d\n",StrCmp("abc","abck"));
+	printf("StrCmp: %d\n",StrCmp("abc",""));
+	
+	printf("StrLen: %lu\n",StrLen(""));
+	printf("StrLen: %lu\n",StrLen("avc"));
+	printf("StrLen: %lu\n",StrLen("awdawd awdawd"));
+	
+	printf("StrCpy: %s\n",StrCpy(StrCpy2,StrCpy1));
+	printf("StrNCpy: %s\n",StrNCpy(StrCpy2,StrCpy1, (size_t)3));
+	
+	printf("StrNCmp: %d\n",StrNCmp("awkawd","aw", (size_t)2));
+	printf("StrCaseCmp: %d\n",StrCaseCmp("Abc","abcD"));
+	printf("StrChr: %s\n",StrChr("abcdf",'b'));
+	printf("StrChr: %s\n",StrChr("abcdf",'\0'));
+	printf("StrDup: %s\n",StrDup("ABCD"));
+	printf("StrCat: %s\n",StrCat(StrCpy2,StrCpy1));
+	printf("StrNCat: %s\n",StrNCat(StrCpy2,StrCpy1,(size_t) 3));
+	printf("StrStr: %s\n",StrStr("awkawd","aw"));
+	printf("StrSpn: %lu\n",StrSpn("aw1kawd","a"));
+	printf("StrTok:%s\n",StrTok(StrCpy1," "));
+	printf("StrTokH:%s\n",strtok(strtok1," "));
+/*
+char *StrTok(char *str, const char *delim);
+*/	
+	return 0;
+}
+customStrings.h/0           0     0     644     688       `
+#ifndef __CUSTOMSTRINGS_H__
+#define __CUSTOMSTRINGS_H__
+#include <stddef.h>
+
+int StrCmp(const char *str1, const char *str2);
+size_t StrLen(const char *str);
+char *StrCpy(char *dst, const char *src);
+char *StrNCpy(char *dst, const char *src, size_t dstsize);
+int StrNCmp(const char *s1, const char *s2, size_t size);
+int StrCaseCmp(const char *s1, const char *s2);
+char *StrChr(const char *s, int c);
+char *StrDup(const char *s);
+char *StrCat(char *dst, const char *src);
+char *StrNCat(char *dst, const char *src, size_t srcsize);
+char *StrStr(const char *haystack, const char *needle);
+size_t StrSpn(const char *s, const char *accept);
+char *StrTok(char *str, const char *delim);
+
+#endif

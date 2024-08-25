@@ -1,6 +1,6 @@
 /*
 Alex Breger
-Reviewed: Ben Bortkevich
+Reviewed: Ben Bortkevich 22.8.24
 */
 
 #ifndef __HETEROARRAY_H__
@@ -8,21 +8,24 @@ Reviewed: Ben Bortkevich
 
 #include <stddef.h>
 
-typedef enum 
-{
-	IS_STR, 
-	IS_INT, 
-	IS_FLOAT
-}IsType;
+typedef void (*PrintP)(void* data);
+typedef void (*AddP)(void* data, int toAdd);
+typedef void (*CleanUpP)(void* data);
 
 typedef struct 
 {
 	void* data;
-	IsType type;
+	PrintP printP;
+	AddP addP;
+	CleanUpP cleanUpP;
 }ArrayType;
 
-void Add(ArrayType* array, size_t size, int toAdd);
-void Print(ArrayType* array, size_t size);
-void CleanUp(ArrayType* array, size_t size);
+void AddInt(void* data, int toAdd);
+void AddFloat(void* data, int toAdd);
+void AddStr(void* data, int toAdd);
+void PrintInt(void* data);
+void PrintFloat(void* data);
+void PrintStr(void* data);
+void CleanUp(void* data);
 
 #endif /*__HETEROARRAY_H__*/

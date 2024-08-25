@@ -1,35 +1,50 @@
 /*
 Alex Breger
-Reviewed: Ben Bortkevich
+Reviewed: Ben Bortkevich 22.8.24
 */
-
-#include <stdlib.h> /*malloc*/
-#include <string.h> /*strcpy*/
+#include <stddef.h>
 #include "heteroArray.h"
 
 #define ARRAY_SIZE 3
 
 int main()
 {
+	size_t i;
 	ArrayType array[ARRAY_SIZE];
+	int x = 5;
+	float y = 6.6;
+	char string[100] = "ab";
+
+	array[0].data = string;
+	array[0].printP = PrintStr;
+	array[0].addP = AddStr;
+	array[0].cleanUpP = CleanUp;
+
+	array[1].data = &y;	
+	array[1].printP = PrintFloat;
+	array[1].addP = AddFloat;
+	array[1].cleanUpP = CleanUp;
 	
+	array[2].data = &x;
+	array[2].printP = PrintInt;
+	array[2].addP = AddInt;
+	array[2].cleanUpP = CleanUp;
 
-	array[0].data = malloc(2*sizeof(char));
-	array[0].data = strcpy(array[0].data, "5");
-	array[0].type = IS_STR;
+	for (i = 0; i < ARRAY_SIZE; ++i)
+	{
+		array[i].printP(array[i].data);
+		array[i].addP(array[i].data, 10);
+		array[i].printP(array[i].data);
 
-	array[1].data = malloc(sizeof(float));
-	*(float*)array[1].data = 5.5;
-	array[1].type = IS_FLOAT;
-
-	array[2].data = malloc(sizeof(int));
-	*(int*)array[2].data = 5;
-	array[2].type = IS_INT;
-
-	Add(array,ARRAY_SIZE,10);
-	Print(array,ARRAY_SIZE);
-
-	CleanUp(array, ARRAY_SIZE);
+	}
+	
+	/*for (i = 0; i < ARRAY_SIZE; ++i)
+	{
+		if(array[i].data)
+		{
+			array[i].cleanUpP(array[i].data);
+		}
+	}*/
 
 	return 0;
 }

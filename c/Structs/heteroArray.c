@@ -1,65 +1,48 @@
 /*
 Alex Breger
-Reviewed: Ben Bortkevich
+Reviewed: Ben Bortkevich 22.8.24
 */
 
 #include <stdio.h> /*printf*/
-#include <string.h> /*strcat*/
-#include <stdlib.h> /*atoi atof size_t*/
+#include <string.h> /*strcat */
+#include <stdlib.h> /*free*/
 #include "heteroArray.h"
 
 #define STRING_BUFFER 50
 
-void Add(ArrayType* array, size_t size, int toAdd)
+void AddInt(void* data, int toAdd)
 {
-	size_t i;
+	*(int*)data += toAdd;
+}
+
+void AddFloat(void* data, int toAdd)
+{
+	*(float*)data += toAdd;
+}
+
+void AddStr(void* data, int toAdd)
+{
 	char intToString[STRING_BUFFER];
-
-	for(i = 0; i < size; ++i)
-	{
-		switch(array[i].type)
-		{
-		case IS_STR:
-			sprintf(intToString, "%d", toAdd);
-			strcat((char*)array[i].data, intToString);
-			break;
-		case IS_INT:
-			*(int*)array[i].data = *(int*)array[i].data + toAdd;
-			break;
-		case IS_FLOAT:
-			*(float*)array[i].data = *(float*)array[i].data + toAdd;
-			break;
-		}
-	}
-}
-void Print(ArrayType* array, size_t size)
-{
-	size_t i;
-	
-	for(i = 0; i < size; ++i)
-	{
-		switch(array[i].type)
-		{
-			case IS_STR:
-			printf("%s\n", (char*)array[i].data);
-			break;
-		case IS_INT:
-			printf("%d\n", *(int*)array[i].data);
-			break;
-		case IS_FLOAT:
-			printf("%f\n", *(float*)array[i].data);
-			break;
-		
-		}
-	}
+	sprintf(intToString, "%d", toAdd);
+	strcat((char*)data, intToString);
 }
 
-void CleanUp(ArrayType* array, size_t size)
+void PrintInt(void* data)
 {
-	size_t i;
+	printf("%d\n", *(int*)data);
+}
 
-	for (i = 0; i < size; ++i)
-	{
-		free(array[i].data);
-	}
+void PrintFloat(void* data)
+{
+	printf("%f\n", *(float*)data);
+}
+
+void PrintStr(void* data)
+{
+	printf("%s\n", (char*)data);
+}
+
+void CleanUp(void* data)
+{
+	free(data);
 }

@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed by: Chananya Tampleman
+*/
+
 #include <stdio.h>
 
 #define SIZEOF_VAR(a) ((char*)(a+1) - (char*)(a))

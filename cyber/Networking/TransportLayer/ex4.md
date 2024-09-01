@@ -1,0 +1,1 @@
+nc -zv ip port_range_to_scan

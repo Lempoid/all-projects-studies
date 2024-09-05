@@ -2,29 +2,30 @@
 #include <stdio.h>
 
 
-#define ARRAY_SIZE 50
+#define ARRAY_SIZE 7
 
 int main()
 {
 	
-	int dest[ARRAY_SIZE];
-	int src[ARRAY_SIZE] = {5,6,3,4,5,6,7,10000};
+	char dest[ARRAY_SIZE];
+	char src[ARRAY_SIZE] = {'5','6','3','4','5','6','7'};
 
 	size_t i = 0;
 
 
 	
 	
-	MemSet(dest, 9, sizeof(dest));
+	MemSet(dest, '0', sizeof(dest));
 
-	MemCpy(dest, src, sizeof(src));
+	MemCpy(src, (src + 1), sizeof(src));
+	MemMove(src+1, src, 6);
 
-	MemMove(dest, src, sizeof(src));
-
-	for(i = 0; i < ARRAY_SIZE; ++i)
+	for(i = 0; i < 7; ++i)
 	{
-		printf("%d\n", dest[i]);	
+		printf("%c\n", src[i]);	
 	}
 	
 	return 0;
 }
+
+	

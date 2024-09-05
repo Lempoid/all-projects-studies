@@ -1,3 +1,9 @@
+/*
+Alex Breger
+Reviewed: Ben Bortkevich 5.9.24
+*/
+
+
 #include <stddef.h> /*size_t*/
 #include <stdint.h> /*uintptr_t*/
 #include "MemManage.h"
@@ -89,95 +95,105 @@ void* MemCpy(void* dest_str, const void* src_str, size_t n)
 	return dest_str;
 }
 
-void *MemMove(void *dest_str, const void *src_str, size_t num_bytes)
+void *MemMove(void *dest_str, const void *src_str, size_t n)
 {
 	unsigned char* byte_runner_dest = (unsigned char*)dest_str;
 	unsigned long* word_runner_dest = (unsigned long*)dest_str;
 	const unsigned char* byte_runner_src = (const unsigned char*)src_str;
 	const unsigned long* word_runner_src = (const unsigned long*)src_str;
+	int isOverlap = IsOverlap(dest_str, src_str, n);
 
 	size_t size_word = sizeof(unsigned long);
 
-	if(IsOverlap(dest_str,src_str) > 0)
+	if(1 == isOverlap)
 	{
-		while(num_bytes > 0 && ((uintptr_t)byte_runner_dest % size_word != 0 || (uintptr_t)byte_runner_src % size_word != 0))
+		while(n > 0 && ((uintptr_t)byte_runner_dest % size_word != 0 || (uintptr_t)byte_runner_src % size_word != 0))
 		{
 			*byte_runner_dest = *byte_runner_src;
 			++byte_runner_dest;
 			++byte_runner_src;
-			--num_bytes;
+			--n;
 		}
 
-		if(num_bytes >= size_word)
+		word_runner_dest = (unsigned long*)byte_runner_dest;
+		word_runner_src = (const unsigned long*)byte_runner_src;
+
+		while(n >= size_word)
 		{
-			word_runner_dest = (unsigned long*)byte_runner_dest;
-			word_runner_src = (const unsigned long*)byte_runner_src;
-
-			while(num_bytes >= size_word)
-			{
-				*word_runner_dest = *word_runner_src;
-				++word_runner_dest;
-				++word_runner_src;
-				num_bytes -= size_word;
-			}
-		
+			*word_runner_dest = *word_runner_src;
+			++word_runner_dest;
+			++word_runner_src;
+			n -= size_word;
 		}
-
 		
 		byte_runner_dest = (unsigned char*)word_runner_dest;
 		byte_runner_src = (unsigned char*)word_runner_src;
 
-		while(num_bytes > 0)
+		while(n > 0)
 		{
 			*byte_runner_dest = *byte_runner_src;
 			++byte_runner_src;
 			++byte_runner_dest;
-			--num_bytes;
+			--n;
 		}
 	}
-	else if(IsOverlap(dest_str,src_str) < 0)
+	else if(-1 == isOverlap)
 	{
-		byte_runner_dest = byte_runner_dest + num_bytes - 1;
-		byte_runner_src = byte_runner_src + num_bytes - 1;
+		byte_runner_dest = byte_runner_dest + n - 1;
+		byte_runner_src = byte_runner_src + n - 1;
 
-		while(num_bytes > 0 && ((uintptr_t)byte_runner_dest % size_word != 0 || (uintptr_t)byte_runner_src % size_word != 0))
+		while(n > 0 && ((uintptr_t)byte_runner_dest % size_word != 0 || (uintptr_t)byte_runner_src % size_word != 0))
 		{
 			*byte_runner_dest = *byte_runner_src;
 			--byte_runner_dest;
 			--byte_runner_src;
-			--num_bytes;
+			--n;
 		}
 
 		
 		word_runner_dest = (unsigned long*)byte_runner_dest;
 		word_runner_src = (const unsigned long*)byte_runner_src;
 
-		while(num_bytes >= size_word)
+		while(n >= size_word)
 		{
 			*word_runner_dest = *word_runner_src;
 			--word_runner_dest;
 			--word_runner_src;
-			num_bytes -= size_word;
+			n -= size_word;
 		}
 
 		
 		byte_runner_dest = (unsigned char*)word_runner_dest;
 		byte_runner_src = (const unsigned char*)word_runner_src;
 
-		while(num_bytes > 0)
+		while(n > 0)
 		{
 			*byte_runner_dest = *byte_runner_src;
 			--byte_runner_src;
 			--byte_runner_dest;
-			--num_bytes;
+			--n;
 		}
 
+	}
+	else
+	{
+		MemCpy(dest_str, src_str, n);
 	}
 
 	return dest_str;
 }
 
-int IsOverlap(const void* dst,const void* src)
+int IsOverlap(const void* dst,const void* src, size_t n)
 {
-	return (const char*)src - (const char*)dst;
+	if((const char*)src >= (const char*)dst + n || (const char*)dst >= (const char*)src + n)
+	{
+		return 0;
+	}
+	
+	if((const char*)src < (const char*)dst)
+	{
+		return -1;
+	}
+
+	return 1;
 }

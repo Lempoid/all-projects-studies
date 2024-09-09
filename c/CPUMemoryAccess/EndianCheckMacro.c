@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define IS_BIG_ENDIAN (!*(char*)&(short){1})
+#define IS_BIG_ENDIAN ((*(unsigned short*)"\0\xff") == 0xff)
 
 int main()
 {

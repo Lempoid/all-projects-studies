@@ -6,13 +6,13 @@ int main(int argc, char **argv, char **envp)
     int i = 8;
     int j = 16;
     int k = 32;
-    int *p = &i;
+    int *p = &j;
 
     FILE *fp;
 
     if(0 == (fp = fopen("stoopid", "r")))
     {
-        printf("well, that didn't work!\n");
+        printf("well, that didn\'t work!\n");
         return -1;
     }
 

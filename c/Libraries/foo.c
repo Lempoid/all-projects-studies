@@ -2,5 +2,5 @@
 
 void Foo(int num)
 {
-	printf("%d\n", num);
+	printf("Dynamic %d\n", num);
 }

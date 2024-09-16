@@ -8,15 +8,12 @@ struct fsa
 	void* first_free;
 	size_t block_size;
 	size_t total_blocks;
-}
-
-/* Forward declaration of the fixed-size allocator structure */
-typedef struct fsa fsa_t
+};
 
 /* Function to determine the amount of memory required for the allocator, including overhead */
 size_t FsaSuggestSize(size_t block_size, size_t block_num)
 {
-	return (size_t)(block_size * block_num + sizeof(fsa_t) + (sizeof(size_t) - 1))
+	return (size_t)(block_size * block_num + sizeof(fsa_t) + (sizeof(size_t) - 1));
 }
 
 /* Initializes the memory pool and sets up the linked list of free blocks */
@@ -25,6 +22,7 @@ fsa_t *FsaInit(void *memory, size_t block_size, size_t pool_size)
 	uintptr_t first_block;
 	void** current_block;
 	void** last_block;
+	size_t i;
 
 	if(NULL == memory && 0 == block_size && 0 == pool_size)
 	{
@@ -36,9 +34,9 @@ fsa_t *FsaInit(void *memory, size_t block_size, size_t pool_size)
 	fsa->block_size = block_size;
 	fsa->total_blocks = pool_size;
 
-	first_block = uintptr_t(memory) + sizeof(fsa_t);
+	first_block = (uintptr_t)memory + sizeof(fsa_t);
 	first_block = (first_block + sizeof(size_t) - 1) & ~(sizeof(size_t) - 1);
-	fsa->first_free = first_block;
+	fsa->first_free = (void*)first_block;
 
 	for(i = 0; i < pool_size; ++i)
 	{
@@ -53,10 +51,33 @@ fsa_t *FsaInit(void *memory, size_t block_size, size_t pool_size)
 }
 
 /* Allocates a block of memory from the allocator */
-void *FsaAlloc(fsa_t *fsa_mngr);
+void *FsaAlloc(fsa_t *fsa_mngr)
+{
+	void* current;
+    
+    if(NULL == fsa_mngr->first_free)
+    {
+        printf("No free blocks\n");
+        return NULL;
+    }
+    
+    current = fsa_mngr->first_free;
+    fsa_mngr->first_free = *(void **)fsa_mngr->first_free;
+    
+    return current;
+}
 
 /* Deallocates a block of memory, returning it to the free list */
-void FsaFree(void *to_free, fsa_t *fsa_mngr);
+void FsaFree(void *to_free, fsa_t *fsa_mngr)
+{
+	if(NULL == to_free || NULL == fsa_mngr)
+	{
+		printf("The pointer or the fsa_manager are null\n");
+		return;
+	}
+	*(void**)to_free = fsa_mngr->first_free;
+	fsa_mngr->first_free = to_free;
+}
 
 /* Returns the number of free blocks available in the allocator */
 size_t FsaCountFree(fsa_t *fsa_mngr)

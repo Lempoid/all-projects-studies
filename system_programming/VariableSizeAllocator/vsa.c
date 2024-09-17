@@ -10,14 +10,14 @@ typedef struct vsa
 
 vsa_t* VsaInit(size_t total_memory, void *pool_memory)
 {
-	vsa_t vsa_mngr = (vsa_t*)malloc(sizeof(vsa_t));
+	vsa_t* vsa_mngr = (vsa_t*)malloc(sizeof(vsa_t));
 	if (NULL == vsa_mngr)
 	{
         return NULL;
     }
     
 	vsa_mngr->memory_start = pool_memory;
-	vsa_mngr->memory_end = pool_memory + memory * sizeof(pool_memory);
+	vsa_mngr->memory_end = pool_memory + total_memory;
 	vsa_mngr->total_memory = total_memory;
 
 	return vsa_mngr;

@@ -6,7 +6,7 @@
 typedef struct vsa vsa_t;
 
 /* Function to initialize the memory pool */
-vsa_t *VsaInit(size_t total memory, void *pool_memory);
+vsa_t *VsaInit(size_t total_memory, void *pool_memory);
 
 /* Function to allocate a specific size of memory */
 void *VsaAlloc(vsa_t *mngr , size_t memory_size);

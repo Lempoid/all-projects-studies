@@ -108,25 +108,77 @@ void* VsaAlloc(vsa_t* vsa, size_t memory_size)
 		}
 		return (void*)((char*)best_fit_block + size_metadata);
 	}
-
-	
 	
 	return NULL;
-	
 }
 
 void VsaFree(void* to_free) 
 {
+	size_t* meta_data;
+	
 	if(NULL == to_free)
 	{
-		perror("The pointer in NULL, nothing to free\n");
+		perror("The pointer is NULL, nothing to free\n");
+		return;
 	}
 
-	*to_free = *(size_t*)to_free & 0x0;
-	
-
+	meta_data = (size_t*)((char*)to_free - sizeof(size_t));
+	*meta_data = *meta_data & ~0x1;
 }
 
 size_t VsaLargestChunkAvailable(vsa_t* vsa) 
 {
+	size_t* current_block;
+	size_t* next_block;
+	size_t next_block_size;
+	int is_next_allocated;
+	size_t remaining_size;
+	size_t current_block_size;
+	int is_current_allocated;
+	size_t size_metadata = sizeof(size_t);
+	size_t largest_free_block = 0;
+
+	if(NULL == vsa)
+	{
+		perror("The VSA is not initialized. Returning 0.\n");
+		return 0;
+	}
+
+	current_block = (size_t*)vsa->pool_start;
+	remaining_size = vsa->total_size;
+
+	while(remaining_size > size_metadata)
+	{
+		current_block_size = *current_block & ~0x1;
+		is_current_allocated = *current_block & 0x1;
+		next_block = (void*)((char*)current_block + current_block_size);
+
+
+
+		if(0 == is_current_allocated)
+		{
+			if(current_block_size > largest_free_block)
+			{
+				largest_free_block = current_block_size;
+			}
+
+			if(remaining_size > current_block_size + size_metadata)
+			{
+				next_block_size = *next_block & ~0x1;
+				is_next_allocated = *next_block & 0x1;
+			}
+
+			if(0 == is_next_allocated)
+			{
+				*current_block = current_block_size + next_block_size;
+				continue;
+			}
+
+			current_block = (size_t*)((char*)current_block + current_block_size);
+			remaining_size -= current_block_size;
+		}
+			
+	}
+	
+	return largest_free_block;
 }

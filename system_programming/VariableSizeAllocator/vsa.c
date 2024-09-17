@@ -89,7 +89,7 @@ void* VsaAlloc(vsa_t* vsa, size_t memory_size)
 				best_size_block = block_size;
 			}
 		}
-		
+
 		current_block = (size_t*)((char*)current_block + block_size);
 		remaining_size -= block_size;
 	}
@@ -101,7 +101,7 @@ void* VsaAlloc(vsa_t* vsa, size_t memory_size)
 		if(remaining_block_size >= size_metadata + size_metadata)
 		{
 			next_block = (size_t*)((char*)best_fit_block + memory_size + size_metadata);
-			best_fit_block = memory_size | 0x1;
+			*best_fit_block = memory_size | 0x1;
 		}
 		else
 		{

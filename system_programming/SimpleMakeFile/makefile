@@ -13,6 +13,8 @@ TEST_FILES = $(TEST_DIR)/main.c
 OBJ_FILES = $(SRC_FILES:.c=.o) $(TEST_FILES:.c=.o)
 LIB_FIELS = $(SRC_FILES:.c=.o)
 
+.PHONY: all clean debug release
+
 all: $(TARGET)
 
 $(TARGET): $(OBJ_FILES)
@@ -27,11 +29,12 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.c
 $(TEST_DIR)/%.o: $(TEST_DIR)/%.c
 	$(GD) -c $< -o $@
 
+foo.o: $(SRC_DIR)/foo.c
+	$(GD) -c $< -o $@
+
 clean:
 	rm -f $(OBJ_FILES) $(TARGET)
 
 debug: CFLAGS += -g
 
 release: CFLAGS += -02
-
-.PHONY: all clean debug release

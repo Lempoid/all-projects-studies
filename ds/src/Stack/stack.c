@@ -109,7 +109,7 @@ void* StackPeek(stack_t *stack)
     }
 
     
-    return (char*)(stack->array + (stack->top * stack->element_size));
+    return (char*)stack->array + (stack->top * stack->element_size);
 }
 
 /* Function to get the current size of the stack */
@@ -121,7 +121,7 @@ size_t StackSize(stack_t *stack)
         return 0;
     }
 
-    return stack->top + 1;
+    return stack->top + 1   ;
 }
 
 /* Function to check if the stack is empty */

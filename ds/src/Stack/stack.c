@@ -159,4 +159,5 @@ size_t StackCapacity(stack_t *stack)
     }
 
     return stack->capacity;
+    
 }

@@ -1,12 +1,20 @@
-#include <stddef.h>
-#include <errno.h>
-#include <stdio.h>
-#include "stack.h"
+/*
+Alex Breger
+Review: Shai Meguidesh 21.9.24
+*/
+
+#include <stddef.h> /*size_t*/
+#include <errno.h> /*stderr*/
+#include <stdio.h> /*fprintf*/
+#include <string.h> /*memcpy*/
+#include <stdlib.h> /*free*/
+#include <sys/types.h> /*ssize_t*/
+#include "/home/lempo/git/ds/include/Stack/stack.h"
 
 struct stack 
 {
     void* array;
-    int top;
+    ssize_t top;
     size_t capacity;
     size_t element_size;
 };
@@ -83,7 +91,7 @@ void StackPush(stack_t *stack, void *element)
         return;
     }
 
-    if(stack->top >= stack->capacity - 1)
+    if(stack->top >= stack->capacity)
     {
         fprintf(stderr, "Stack is full.\n");
         return;

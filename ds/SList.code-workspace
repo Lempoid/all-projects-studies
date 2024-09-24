@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "include/SList"
+		},
+		{
+			"path": "src/SList"
+		},
+		{
+			"path": "test/SList"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"slist.h": "c"
+		}
+	}
+}

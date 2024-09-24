@@ -149,6 +149,13 @@ slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
       return list->end_node;
    }
 
+   if(list->start_node == list->end_node)
+   {
+      node_to_insert->data = data;
+      node_to_insert->next = list->end_node;
+      return node_to_insert;
+   }
+   
    node_to_insert->data = data;
    node_to_insert->next = where->next;
    where->next = node_to_insert;

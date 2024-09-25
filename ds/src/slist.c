@@ -1,5 +1,6 @@
 #include <stdio.h> /*fprintf*/
-#include "slist.h"
+#include <stdlib.h> /*free calloc*/
+#include "SList/slist.h"
 
 struct slist
 {
@@ -12,9 +13,6 @@ struct slist_node
     void *data;
     slist_iter_t next;
 };
-
-typedef int (*action_func_t)(void *data, void *param);
-typedef int (*match_func_t)(const void *data, void *param);
 
 /* Creates an empty list and returns it.
    Returns NULL upon failure.

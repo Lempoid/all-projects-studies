@@ -9,7 +9,7 @@ Review: Shai Meguidesh 21.9.24
 #include <string.h> /*memcpy*/
 #include <stdlib.h> /*free*/
 #include <sys/types.h> /*ssize_t*/
-#include "/home/lempo/git/ds/include/Stack/stack.h"
+#include "stack.h"
 
 struct stack 
 {

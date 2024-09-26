@@ -1,6 +1,6 @@
 #include <stdio.h> /*fprintf*/
 #include <stdlib.h> /*free calloc*/
-#include "SList/slist.h"
+#include "slist.h"
 
 struct slist
 {
@@ -19,13 +19,16 @@ struct slist_node
    Call SListDestroy when done working with the list. */
 slist_t *SListCreate(void)
 {
-    slist_iter_t node = calloc(1, sizeof(slist_iter_t));
     slist_t *list_manager = calloc(1, sizeof(slist_t));
+    slist_iter_t dummy = calloc(1, sizeof(slist_iter_t));
 
-    node->data = 0;
-    node->next = node;
-    list_manager->end_node = node;
-    list_manager->start_node = node;
+
+    dummy->data = 0;
+    dummy->next = dummy;
+    list_manager->end_node = dummy;
+    list_manager->start_node = dummy;
+
+    return list_manager;
 }
 
 /* Destroys the list.

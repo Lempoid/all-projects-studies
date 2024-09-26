@@ -1,4 +1,4 @@
-#include "SList/slist.h"
+#include "slist.h"
 
 int main()
 {

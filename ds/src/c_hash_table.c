@@ -128,9 +128,16 @@ void* HashFind(const hash_t* table, match_func_t is_match_func,
 hash_function_t hash_function, const void *key)
 {
     void* data_from_hash_table;
-    data_from_hash_table = SListGetData(table->array[hash_function(key)]);
+    slist_iter_t result;
+    
+    result = SListFind(SListBegin(hash_function(key)),SListEnd(hash_function(key)),is_match_func, key);
 
-    is_match_func(data_from_hash_table,);
+    if(NULL == result)
+    {
+        return 0;
+    }
+
+    return 1;
 }
 
 /* Sends the data from each element in the hash table (in order) to the 
@@ -139,4 +146,19 @@ hash_function_t hash_function, const void *key)
    Returns the value returned from the last call to action_func.
    Time Complexity: O(n) */                                
 int HashForEach(const hash_t* table, action_func_t action_func, 
-const void *param);
+const void *param)
+{
+    size_t i;
+    int result;
+
+    for (i = 0; i < table->size; ++i)
+    {
+        result = SListForEach(SListBegin(table->array[i]),SListEnd(table->array[i]),action_func,param);
+        if(0 == result)
+        {
+            return result;
+        }
+    }
+    
+    return result;
+}

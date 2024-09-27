@@ -1,41 +1,76 @@
+#include <stdio.h>
 #include "slist.h"
 
-int main()
+int main() 
 {
-    slist_t* list = SListCreate();
+    slist_t *list;
+    slist_iter_t iter;
+    slist_iter_t iter2; 
+    slist_iter_t iter3;
+    int a = 10;
+    int b = 20;
+    int c = 30;
 
-    printf("%d", list==NULL);
+    list = SListCreate();
+    if (NULL != list) 
+    {
+        printf("List created.\n");
+    } 
+    else 
+    {
+        printf("Failed to create list.\n");
+    }
 
-    void SListDestroy(slist_t *list);
+    if (1 == SListIsEmpty(list)) 
+    {
+        printf("List is initially empty.\n");
+    } 
+    else 
+    {
+        printf("List is not empty, but it should be.\n");
+    }
 
-    slist_iter_t SListBegin(const slist_t *list);
+    iter = SListInsert(list, SListEnd(list), &a);
+    iter2 = SListInsert(list, SListEnd(list), &b);
+    iter3 = SListInsert(list, SListEnd(list), &c);
+    printf("Inserted %d, %d, %d into the list.\n",*(int*)SListGetData(iter),*(int*)SListGetData(iter2),*(int*)SListGetData(iter3));
 
-    slist_iter_t SListEnd(const slist_t *list);
+    if (0 == SListIsEmpty(list)) 
+    {
+        printf("List is not empty after insertions.\n");
+    } else {
+        printf("List is empty, but it shouldn't be.\n");
+    }
 
-    slist_iter_t SListNext(slist_iter_t iter);
+    printf("List count: %lu\n", SListCount(list));
 
-    int SListIterIsEqual(slist_iter_t one, slist_iter_t other);
+    printf("First element: %d\n", *(int*)SListGetData(iter));
+    printf("Second element: %d\n", *(int*)SListGetData(iter2));
+    printf("Third element: %d\n", *(int*)SListGetData(iter3));
 
-    void *SListGetData(slist_iter_t iter);
+    printf("Iterating through the list: "); 
+    iter = SListBegin(list);
+    while (iter != SListEnd(list)) 
+    {
+        printf("%d ", *(int*)SListGetData(iter));
+        iter = SListNext(iter);
+    }
+    printf("\n");
 
-    void SListSetData(slist_iter_t iter, void *data);
+    SListRemove(iter2);
+    printf("Removed second element: %d.\n", *(int*)SListGetData(iter2));
 
-    slist_iter_t SListInsert(slist_t *list,slist_iter_t where, void *data);
+    printf("List after removal: ");
+    iter = SListBegin(list);
+    while (iter != SListEnd(list)) 
+    {
+        printf("%d ", *(int*)SListGetData(iter));
+        iter = SListNext(iter);
+    }
+    printf("\n");
 
-    slist_iter_t SListRemove(slist_iter_t iter);
-
-    int SListIsEmpty(const slist_t *list);
-
-    size_t SListCount(const slist_t *list);
-
-    slist_iter_t SListFind(slist_iter_t from,
-                            slist_iter_t to,
-                            match_func_t is_match_func,
-                            void *param);
-
-    int SListForEach(slist_iter_t from,
-                    slist_iter_t to,
-                    action_func_t action_func, void *param);
+    SListDestroy(list);
+    printf("List destroyed.\n");
 
     return 0;
 }

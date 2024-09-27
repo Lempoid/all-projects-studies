@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run Active Test",
+            "name": "gcc - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/test/${fileBasenameNoExtension}",
@@ -19,10 +19,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build-run",
-            "miDebuggerPath": "/usr/bin/gdb",
-            "logging": { "engineLogging": true },
-            "targetArchitecture": "x64"
+            "preLaunchTask": "gcc build test file",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }

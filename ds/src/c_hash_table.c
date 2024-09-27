@@ -11,10 +11,6 @@ struct hash_table
     match_func_t match_function;
 };
 
-typedef int   (*action_func_t)(void *data, void *param);
-typedef int   (*match_func_t)(const void *data, void *param);
-typedef size_t   (*hash_function_t)(void* key);
-
 /* Creates a hash table and returns it.
    Returns NULL upon failure. */   
 hash_t *HashCreate(const size_t size, hash_function_t hash_function, 
@@ -31,7 +27,7 @@ match_func_t match_function)
     hash_table->array = calloc(size, sizeof(slist_t*));
     if (NULL == hash_table->array)
     {
-        fprintf(stderr,"Can't allocate memry for hash table. Returning NULL.\n");
+        fprintf(stderr,"Can't allocate memory for hash table. Returning NULL.\n");
         return NULL;
     }
 
@@ -70,7 +66,14 @@ void HashDestroy(hash_t* table)
 int HashRemove(const void* key, hash_t* table)
 {
     size_t index = table->hash_function(key);
-    SListDestroy(table->array[index]);
+    
+    if (index >= table->size || table->array[index] == NULL)
+    {
+        return 0;
+    }
+
+    SListRemove(table->array[index]);
+    table->array[index] == NULL;
 
     return 1;
 }

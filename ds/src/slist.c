@@ -1,6 +1,6 @@
 #include <stdio.h>	/*fprintf*/
 #include <stdlib.h> /*free calloc*/
-#include "slist.h"
+#include "/home/lempo/git/ds/include/slist.h"
 
 struct slist
 {

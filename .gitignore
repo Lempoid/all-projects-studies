@@ -7,7 +7,7 @@
 *.o
 *.so
 *.sh
-a.out
+*.out
 
 # Packages #
 ############

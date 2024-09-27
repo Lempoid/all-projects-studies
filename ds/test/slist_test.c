@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "slist.h"
+#include "/home/lempo/git/ds/include/slist.h"
 
 int main() 
 {

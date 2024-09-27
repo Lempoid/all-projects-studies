@@ -11,7 +11,7 @@
                 "${workspaceFolder}/test/${fileBasenameNoExtension}_test.c",
                 "${workspaceFolder}/src/${fileBasenameNoExtension}.c",
                 "-o",
-                "${workspaceFolder}/test/${fileBasenameNoExtension}"
+                "${workspaceFolder}/test/${fileBasenameNoExtension}.out"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

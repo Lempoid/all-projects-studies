@@ -4,8 +4,7 @@
 
 struct slist
 {
-	slist_iter_t start_node;
-	slist_iter_t end_node;
+	slist_iter_t dummy;
 };
 
 struct slist_node
@@ -19,20 +18,22 @@ struct slist_node
    Call SListDestroy when done working with the list. */
 slist_t *SListCreate(void)
 {
-	slist_t *list_manager = calloc(1, sizeof(slist_t));
-
-	if (NULL == list_manager)
+	slist_t *list_manager = malloc(sizeof(slist_t));
+	list_manager->dummy = malloc(sizeof(slist_iter_t));
+	if (NULL == list_manager || NULL == list_manager->dummy)
 	{
 		fprintf(stderr, "Failed to create list. Returning NULL.\n");
+		
 		free(list_manager);
+		list_manager = NULL;
+		free(list_manager->dummy);
+		list_manager->dummy = NULL;
+		
 		return NULL;
 	}
 
-	list_manager->end_node = calloc(1, sizeof(struct slist_node));
-	list_manager->start_node = calloc(1, sizeof(struct slist_node));
-
-	list_manager->end_node->next = list_manager->start_node;
-	list_manager->start_node->next = list_manager->end_node;
+	list_manager->dummy->next = list_manager->dummy;
+	list_manager->dummy->data = NULL;
 
 	return list_manager;
 }
@@ -43,20 +44,18 @@ slist_t *SListCreate(void)
    Note: It is legal to destroy NULL.*/
 void SListDestroy(slist_t *list)
 {
-	slist_iter_t node_to_destroy = list->start_node->next;
+	slist_iter_t node_to_destroy = list->dummy->next;
 	slist_iter_t runner;
 
-	while (node_to_destroy != list->end_node)
+	while (node_to_destroy != list->dummy)
 	{
 		runner = node_to_destroy->next;
 		free(node_to_destroy);
 		node_to_destroy = runner;
 	}
 
-	free(list->end_node);
-	list->end_node = NULL;
-	free(list->start_node);
-	list->start_node = NULL;
+	free(list->dummy);
+	list->dummy = NULL;
 	free(list);
 	list = NULL;
 }
@@ -66,21 +65,14 @@ void SListDestroy(slist_t *list)
    Time Complexity: O(1) */
 slist_iter_t SListBegin(const slist_t *list)
 {
-	if (list->end_node == list->start_node->next)
-	{
-		return list->end_node;
-	}
-	else
-	{
-		return list->start_node->next;
-	}
+	return list->dummy->next;
 }
 
 /* Returns an iterator to beyond the last element (out of range).
    Time Complexity: O(1) */
 slist_iter_t SListEnd(const slist_t *list)
 {
-	return list->end_node;
+	return list->dummy;
 }
 
 /* Returns an iterator to the element following cur.
@@ -131,9 +123,7 @@ void SListSetData(slist_iter_t iter, void *data)
    Time Complexity: O(1) */
 slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
 {
-	/*llllllllllllllllllllllllllllllllllllllllllllllllllllllawdawdawdawdawdawdawdawdawdawdawdllllllllllllll*/
-	slist_iter_t node_to_insert = calloc(1, sizeof(struct slist_node));
-	slist_iter_t remember_node_for_dummy_check = where;
+	slist_iter_t node_to_insert = malloc(sizeof(slist_iter_t));
 
 	if (NULL == list)
 	{
@@ -150,22 +140,13 @@ slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
 	if (NULL == node_to_insert)
 	{
 		fprintf(stderr, "Failed to create new node, returning last element.\n");
-		return list->end_node;
+		return list->dummy->next;
 	}
 
 	node_to_insert->data = data;
-    node_to_insert->next = where->next;
-    where->next = node_to_insert;
-
-	if(remember_node_for_dummy_check == list->end_node || remember_node_for_dummy_check->next == list->end_node)
-	{
-		list->end_node->next = node_to_insert;
-	}
-	if(remember_node_for_dummy_check == list->start_node || remember_node_for_dummy_check == list->start_node->next)
-	{
-		list->start_node->next = node_to_insert;
-	}
-
+	node_to_insert->next = where->next;
+	where->next = node_to_insert;
+	
     return node_to_insert;
 }
 
@@ -175,12 +156,6 @@ slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
 slist_iter_t SListRemove(slist_iter_t iter)
 {
 	slist_iter_t node_to_remove;
-
-	if (iter->next->next == iter)
-	{
-		fprintf(stderr, "Can't remove the last node. Returning iterator to end.\n");
-		return iter->next;
-	}
 	
 	node_to_remove = iter->next;
 
@@ -189,7 +164,7 @@ slist_iter_t SListRemove(slist_iter_t iter)
 
     free(node_to_remove);
 
-    return iter;
+    return iter->next;
 }
 
 /* Returns 1 if the list is empty, 0 if it's not.
@@ -202,7 +177,7 @@ int SListIsEmpty(const slist_t *list)
 		return -1;
 	}
 
-	if (list->start_node->next == list->end_node)
+	if (list->dummy->next == list->dummy)
 	{
 		return 1;
 	}
@@ -226,9 +201,9 @@ size_t SListCount(const slist_t *list)
 	}
 
 	count = 0;
-	runner = list->start_node->next;
+	runner = list->dummy->next;
 
-	while (runner != list->end_node)
+	while (runner != list->dummy)
 	{
 		++count;
 		runner = runner->next;

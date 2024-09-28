@@ -23,11 +23,11 @@ int main()
 
     if (1 == SListIsEmpty(list)) 
     {
-        printf("List is initially empty.\n");
+        printf("List is empty after initialization.\n");
     } 
     else 
     {
-        printf("List is not empty, but it should be.\n");
+        printf("List is not empty after initialization.\n");
     }
 
     iter = SListInsert(list, SListEnd(list), &a);
@@ -38,8 +38,10 @@ int main()
     if (0 == SListIsEmpty(list)) 
     {
         printf("List is not empty after insertions.\n");
-    } else {
-        printf("List is empty, but it shouldn't be.\n");
+    } 
+    else 
+    {
+        printf("List is empty after insertion.\n");
     }
 
     printf("List count: %lu\n", SListCount(list));
@@ -55,6 +57,7 @@ int main()
         printf("%d ", *(int*)SListGetData(iter));
         iter = SListNext(iter);
     }
+    
     printf("\n");
 
     SListRemove(iter2);
@@ -67,10 +70,12 @@ int main()
         printf("%d ", *(int*)SListGetData(iter));
         iter = SListNext(iter);
     }
+    
     printf("\n");
 
     SListDestroy(list);
     printf("List destroyed.\n");
-
+    
+    
     return 0;
 }

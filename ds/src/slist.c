@@ -20,25 +20,19 @@ struct slist_node
 slist_t *SListCreate(void)
 {
 	slist_t *list_manager = calloc(1, sizeof(slist_t));
-	slist_iter_t start_dummy = calloc(1, sizeof(slist_iter_t));
-	slist_iter_t end_dummy = calloc(1, sizeof(slist_iter_t));
 
-	if (NULL == start_dummy || NULL == end_dummy || NULL == list_manager)
+	if (NULL == list_manager)
 	{
 		fprintf(stderr, "Failed to create list. Returning NULL.\n");
-		free(start_dummy);
-		free(end_dummy);
 		free(list_manager);
 		return NULL;
 	}
 
-	start_dummy->data = NULL;
-	end_dummy->data = NULL;
-	start_dummy->next = end_dummy;
-	end_dummy->next = NULL;
+	list_manager->end_node = calloc(1, sizeof(struct slist_node));
+	list_manager->start_node = calloc(1, sizeof(struct slist_node));
 
-	list_manager->end_node = end_dummy;
-	list_manager->start_node = start_dummy;
+	list_manager->end_node->next = list_manager->start_node;
+	list_manager->start_node->next = list_manager->end_node;
 
 	return list_manager;
 }
@@ -137,12 +131,19 @@ void SListSetData(slist_iter_t iter, void *data)
    Time Complexity: O(1) */
 slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
 {
-
-	slist_iter_t node_to_insert = calloc(1, sizeof(slist_iter_t));
+	/*llllllllllllllllllllllllllllllllllllllllllllllllllllllawdawdawdawdawdawdawdawdawdawdawdllllllllllllll*/
+	slist_iter_t node_to_insert = calloc(1, sizeof(struct slist_node));
+	slist_iter_t remember_node_for_dummy_check = where;
 
 	if (NULL == list)
 	{
 		fprintf(stderr, "List is null, returning NULL.\n");
+		return NULL;
+	}
+
+	if(NULL == where)
+	{
+		fprintf(stderr, "Iter is null, returning NULL.\n");
 		return NULL;
 	}
 
@@ -152,18 +153,20 @@ slist_iter_t SListInsert(slist_t *list, slist_iter_t where, void *data)
 		return list->end_node;
 	}
 
-    node_to_insert->data = where->data;
+	node_to_insert->data = data;
     node_to_insert->next = where->next;
-
-	where->data = data;
     where->next = node_to_insert;
 
-    if(node_to_insert->next == list->end_node)
-    {
-        list->end_node->next = where;
-    }
+	if(remember_node_for_dummy_check == list->end_node || remember_node_for_dummy_check->next == list->end_node)
+	{
+		list->end_node->next = node_to_insert;
+	}
+	if(remember_node_for_dummy_check == list->start_node || remember_node_for_dummy_check == list->start_node->next)
+	{
+		list->start_node->next = node_to_insert;
+	}
 
-    return where;
+    return node_to_insert;
 }
 
 /* Removes the node referred to by cur.
@@ -181,21 +184,8 @@ slist_iter_t SListRemove(slist_iter_t iter)
 	
 	node_to_remove = iter->next;
 
-	if(NULL == iter->data)
-	{
-		iter->next = iter->next->next;
-		free(node_to_remove);
-		return iter->next;
-	}
-
     iter->data = node_to_remove->data;
-
     iter->next = node_to_remove->next;
-
-    if(iter->next->next == iter)
-    {
-        iter->next->next = iter->next;
-    }
 
     free(node_to_remove);
 
@@ -212,7 +202,7 @@ int SListIsEmpty(const slist_t *list)
 		return -1;
 	}
 
-	if (list->end_node == list->start_node->next)
+	if (list->start_node->next == list->end_node)
 	{
 		return 1;
 	}
@@ -289,11 +279,12 @@ int SListForEach(slist_iter_t from, slist_iter_t to, action_func_t action_func, 
 
 	while (from != to)
 	{
-		if (0 == action_func(from->data, param))
+		result = action_func(from->data, param);
+		if(result != 0)
 		{
-			result = action_func(from->data, param);
 			break;
 		}
+
 		from = from->next;
 	}
 

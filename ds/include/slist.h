@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed: Hananya Tampleman somewhere between 22-28.9.24
+*/
+
 #ifndef __SLIST_H__
 #define __SLIST_H__
 

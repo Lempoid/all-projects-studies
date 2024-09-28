@@ -1,6 +1,11 @@
+/*
+Alex Breger
+Reviewed: Hananya Tampleman somewhere between 22-28.9.24
+*/
+
 #include <stdio.h>	/*fprintf*/
 #include <stdlib.h> /*free calloc*/
-#include "/home/lempo/git/ds/include/slist.h"
+#include "slist.h"
 
 struct slist
 {

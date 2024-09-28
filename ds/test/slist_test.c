@@ -1,5 +1,10 @@
-#include <stdio.h>
-#include "/home/lempo/git/ds/include/slist.h"
+/*
+Alex Breger
+Reviewed: Hananya Tampleman somewhere between 22-28.9.24
+*/
+
+#include <stdio.h> /*printf*/
+#include "slist.h"
 
 int main() 
 {

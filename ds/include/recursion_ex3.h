@@ -3,8 +3,8 @@
 
 #include "stack.h"
 
-void EmptyTheStack();
-void SortStack();
+void SortStack(stack_t* stack_to_empty, stack_t* stack_to_fill);
+void EmptyTheStack(stack_t* to_sort, void* data);
 
 
 

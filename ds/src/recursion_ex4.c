@@ -1,18 +1,8 @@
-// Alex Breger
-// Code Review Ben Bortkevich 6.8.24
+
 
 #include <assert.h> /*assert*/
 #include "strings_reimplementation.h" /*StrLen StrCmp*/
 #include "customStrings.h"
-
-int main()
-{
-const char *string1 = "abc";
-const char *string2 = "abc";
-const char *string3 = "acd";
-
-return 0;
-}
 
 size_t StrLen(const char *str)
 {

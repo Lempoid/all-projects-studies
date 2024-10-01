@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
+                "/home/lempo/git/**",
                 "/usr/include",
                 "/usr/local/include"
             ],

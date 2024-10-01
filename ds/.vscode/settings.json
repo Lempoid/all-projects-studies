@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "recursion_ex1.h": "c",
-        "recursion_ex3.h": "c"
+        "recursion_ex3.h": "c",
+        "assert.h": "c"
     }
 }

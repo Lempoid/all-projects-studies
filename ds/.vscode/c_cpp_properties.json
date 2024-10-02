@@ -3,9 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
+                "/home/lempo/git/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
-                "/home/lempo/git/**",
                 "/usr/include",
                 "/usr/local/include"
             ],

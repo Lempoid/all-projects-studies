@@ -18,22 +18,22 @@ void CountSort(int* array, size_t size)
 
     countingArray = calloc(max + 1, sizeof(int));
 
-    for(i = 0; i < max + 1; ++i)
+    for(i = 0; i < size; ++i)
     {
         countingArray[array[i]] += 1;
     }
 
-    for(i = 1; i < max + 1; ++i)
+    for(i = 1; i <= max; ++i)
     {
         countingArray[i] = countingArray[i - 1] + countingArray[i];
     }
 
     sumArray = (int*)malloc(size * sizeof(int));
 
-    for(i = size - 1; i >= 0; --i)
+    for(i = size; i > 0; --i)
     {
-        sumArray[countingArray[array[i] - 1]] = array[i];
-        countingArray[array[i]] = countingArray[array[i]] - 1;
+        sumArray[countingArray[array[i - 1]] - 1] = array[i - 1];
+        countingArray[array[i - 1]] = countingArray[array[i - 1]] - 1;
     }
 
     for (i = 0; i < size; ++i)

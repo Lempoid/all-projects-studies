@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
 #ifndef __HASH_H__
 #define __HASH_H__
 

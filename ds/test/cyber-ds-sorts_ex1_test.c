@@ -1,29 +1,17 @@
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
+#include <stdio.h> /*printf*/
 #include "cyber-ds-sorts_ex1.h"
 
 int main()
 {
-    srand(time(NULL));
-    int* array = (int*)malloc(5000 * sizeof(int));
-    size_t i;
-    
-    for (i = 0; i < 5000; ++i)
-    {
-        array[i] = rand() % 100;
-    }
-    
-    CountSort(array, 5000);
+    int array[] = {1,2,3,4,5,6,7,8,9,10};
 
-    for ( i = 0; i < 5000; ++i)
-    {
-        printf("%d ", array[i]);
-        if(0 == i % 10)
-        {
-            printf("\n"); 
-        }
-    }
-    
+    printf("recursive binary: %d\n",RecursiveBinarySearch(array,0 , 10, 5));
+    printf("itirative binary: %d\n",IterativeBinarySearch(array, 10, 5));
+
     return 0;
 }

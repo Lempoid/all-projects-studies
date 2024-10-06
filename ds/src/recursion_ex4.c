@@ -1,8 +1,11 @@
-
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
 
 #include <assert.h> /*assert*/
-#include "strings_reimplementation.h" /*StrLen StrCmp*/
-#include "customStrings.h"
+#include <string.h> /*strncmp*/
+#include "recursion_ex4.h"
 
 size_t StrLen(const char *str)
 {
@@ -19,7 +22,7 @@ int StrCmp(const char *string1, const char *string2)
 	
 	if((*string1 != *string2) || ('\0' == *string1 || '\0' == *string2))
 	{
-		return (int *) (*string1 - *string2);
+		return (int) (*string1 - *string2);
 	}
     
 	return StrCmp(++string1,++string2);
@@ -60,7 +63,7 @@ char *StrStr(const char *haystack, const char *needle)
 		return NULL;
 	}
 	
-	if(0 == StrNCmp(haystack, needle, StrLen(needle)))
+	if(0 == strncmp(haystack, needle, StrLen(needle)))
 		{
 			return (char*)haystack;
 		}
@@ -74,6 +77,7 @@ char *StrCpy(char *dst, const char *src)
 	if('\0' == *src)
 	{
 		*dst = '\0';
+		return dst;
 	}
 
 	*dst = *src;

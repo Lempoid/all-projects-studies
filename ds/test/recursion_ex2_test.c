@@ -1,5 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
+#include <stdio.h> /*printf*/
+#include <stdlib.h> /*malloc*/
 #include "recursion_ex2.h"
 
 struct node

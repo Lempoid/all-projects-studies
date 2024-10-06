@@ -1,6 +1,11 @@
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
 #include <stdio.h> /*printf*/
-#include <time.h>
-#include <stdlib.h>
+#include <time.h> /*srand time*/
+#include <stdlib.h> /*malloc*/
 #include "cyber-ds-sorts_ex7.h"
 
 #define ARRAY_SIZE 5000

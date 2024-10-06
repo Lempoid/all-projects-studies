@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
 #include "cyber-ds-sorts_ex2.h"
 
 void MyBubbleSort(int* array, size_t size)

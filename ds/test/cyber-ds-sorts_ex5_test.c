@@ -1,7 +1,11 @@
-#include <stdio.h>
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
 
-#include <time.h>
-#include <stdlib.h>
+#include <stdio.h> /*printf*/
+#include <time.h> /*srand time*/
+#include <stdlib.h> /*malloc*/
 #include "cyber-ds-sorts_ex5.h"
 
 int main()

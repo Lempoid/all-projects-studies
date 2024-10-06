@@ -7,6 +7,8 @@
         "stddef.h": "c",
         "slist.h": "c",
         "cyber-ds-sorts_ex4.h": "c",
-        "cyber-ds-sorts_ex2.h": "c"
+        "cyber-ds-sorts_ex2.h": "c",
+        "pointers-part_2_ex1.h": "c",
+        "recursion_ex4.h": "c"
     }
 }

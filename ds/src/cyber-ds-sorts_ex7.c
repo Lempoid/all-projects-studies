@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
 #include "cyber-ds-sorts_ex7.h"
 
 void RecursiveQsort(void *base, size_t nmemb, size_t size,

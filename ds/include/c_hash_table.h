@@ -4,14 +4,14 @@
 #include <stddef.h> /* for size_t */
 
 typedef struct hash_table hash_t;
-typedef int   (*action_func_t)(void *data, void *param);
-typedef int   (*match_func_t)(const void *data, void *param);
+typedef int   (*action_func_hash_t)(void *data, void *param);
+typedef int   (*match_func_hash_t)(const void *data, void *param);
 typedef size_t   (*hash_function_t)(void* key);
 
 /* Creates a hash table and returns it.
    Returns NULL upon failure. */   
 hash_t *HashCreate(const size_t size, hash_function_t function, 
-                  match_func_t compare);
+                  match_func_hash_t compare);
 
 /* Destroys the hash table.
    Call when done working with the table. 
@@ -42,7 +42,7 @@ int HashIsEmpty(const hash_t* table);
    The is_match_func function should return 1 if the data matches.
    Returns the first element that matches, or false if not found.
    O(n) */                                       
-void* HashFind(const hash_t* table, match_func_t is_match_func, 
+void* HashFind(const hash_t* table, match_func_hash_t is_match_func, 
                hash_function_t function, const void *key);
 
 /* Sends the data from each element in the hash table (in order) to the 
@@ -50,7 +50,7 @@ void* HashFind(const hash_t* table, match_func_t is_match_func,
    fails (return != 0), even if not all elements have been sent.
    Returns the value returned from the last call to action_func.
    Time Complexity: O(n) */                                
-int HashForEach(const hash_t* table, action_func_t action_func, 
+int HashForEach(const hash_t* table, action_func_hash_t action_func, 
                const void *param);
 
 

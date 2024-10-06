@@ -1,3 +1,8 @@
+/*
+Alex Breger
+Reviewed: Chananya Templeman 6.10.24
+*/
+
 #include <stdlib.h> /*free calloc*/
 #include <stdio.h> /*fprintf*/
 #include "c_hash_table.h"
@@ -8,16 +13,11 @@ struct hash_table
     slist_t **array;
     size_t size;
     hash_function_t hash_function;
-    match_func_t match_function;
+    match_func_hash_t match_function;
 };
 
-typedef struct hash_table hash_t;
-typedef int   (*action_func_t)(void *data, void *param);
-typedef int   (*match_func_t)(const void *data, void *param);
-typedef size_t   (*hash_function_t)(void* key);
-
 hash_t *HashCreate(const size_t size, hash_function_t hash_function, 
-match_func_t match_function)
+match_func_hash_t match_function)
 {
     size_t i;
     hash_t* hash_table = calloc(1,sizeof(hash_t));
@@ -61,23 +61,36 @@ void HashDestroy(hash_t* table)
 
 int HashRemove(const void* key, hash_t* table)
 {
-    size_t index = table->hash_function(key);
-    
+    size_t index = table->hash_function((void*)key) % table->size;
+    slist_t* list = table->array[index];
+    slist_iter_t start = SListBegin(list);
+    slist_iter_t end = SListEnd(list);
+
     if (index >= table->size || table->array[index] == NULL)
     {
         return 0;
     }
 
-    SListRemove(table->array[index]);
-    table->array[index] == NULL;
+    while (!SListIterIsEqual(start, end)) 
+    {
+        if (0 == table->match_function(key, SListGetData(start))) 
+        {
+            SListRemove(start);
+
+            return 1;
+        }
+
+        start = SListNext(start);
+    }
+
 
     return 1;
 }
 
 int HashInsert(const void* key, hash_t* table, const void* data)
 {
-    size_t index = table->hash_function(key);
-    SListInsert(table->array[index], 0, data);
+    size_t index = table->hash_function(key) % table->size;
+    SListInsert(table->array[index], SListBegin(table->array[index]), data);
 
     return 1;
 }
@@ -111,24 +124,24 @@ int HashIsEmpty(const hash_t* table)
     return 1;
 }
 
-void* HashFind(const hash_t* table, match_func_t is_match_func, 
+void* HashFind(const hash_t* table, match_func_hash_t is_match_func, 
 hash_function_t hash_function, const void *key)
 {
-    void* data_from_hash_table;
+    size_t index = table->hash_function(key) % table->size;
     slist_iter_t result;
     
-    result = SListFind(SListBegin(hash_function(key)),SListEnd(hash_function(key)),is_match_func, key);
+    result = SListFind(SListBegin(table->array[index]), SListEnd(table->array[index]), is_match_func, key);
 
     if(NULL == result)
     {
-        return 0;
+        return NULL;
     }
 
-    return result;
+    return SListGetData(result);
 }
 
                             
-int HashForEach(const hash_t* table, action_func_t action_func, 
+int HashForEach(const hash_t* table, action_func_hash_t action_func, 
 const void *param)
 {
     size_t i;

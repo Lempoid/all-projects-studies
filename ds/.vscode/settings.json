@@ -4,6 +4,9 @@
         "recursion_ex3.h": "c",
         "assert.h": "c",
         "cyber-ds-sorts_ex1.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "slist.h": "c",
+        "cyber-ds-sorts_ex4.h": "c",
+        "cyber-ds-sorts_ex2.h": "c"
     }
 }

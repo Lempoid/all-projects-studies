@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "cyber-ds-sorts_ex2.h"
+#include "cyber-ds-sorts_ex3.h"
 
 int main()
 {
@@ -14,7 +14,7 @@ int main()
         array[i] = rand() % 100;
     }
     
-    MyBubbleSort(array, 5000);
+    SelectionSort(array, 5000);
 
     for ( i = 0; i < 5000; ++i)
     {

@@ -1,10 +1,29 @@
-#include "/home/lempo/git/ds/include/cyber-ds-sorts_ex1.h"
-
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "cyber-ds-sorts_ex1.h"
 
 int main()
 {
-    int array[] = {1,2,3,4,5,6,7,8,9,10};
+    srand(time(NULL));
+    int* array = (int*)malloc(5000 * sizeof(int));
+    size_t i;
+    
+    for (i = 0; i < 5000; ++i)
+    {
+        array[i] = rand() % 100;
+    }
+    
+    CountSort(array, 5000);
 
+    for ( i = 0; i < 5000; ++i)
+    {
+        printf("%d ", array[i]);
+        if(0 == i % 10)
+        {
+            printf("\n"); 
+        }
+    }
     
     return 0;
 }

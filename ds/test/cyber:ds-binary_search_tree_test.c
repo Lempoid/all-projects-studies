@@ -3,16 +3,23 @@
 
 typedef int (*action_function_t)(void *data, void *parameter);
 
-typedef int (*compare_func_t)(const void *data1, const void *data2);
-
 int CompareFunc(const void* data1, const void* data2)
 {
     return *(int*)data1 - *(int*)data2;
 }
+
 int main()
 {
+    int a = 6;
+    int b = 10;
+    int c = 4;
+    int d = 3;
+    int e = 9;
+    compare_func_t CompareFunction = CompareFunc;
+
     printf("Creating BST\n");
-    bst_t* tree = BstCreate(CompareFunc);
+    bst_t* tree = BstCreate(CompareFunction);
+    
     if(NULL == tree)
     {
         fprintf(stderr, "Creation of BST failed.\n");
@@ -22,18 +29,26 @@ int main()
         printf("BST created.\n");
     }
     
-    printf("Inserting 6.\n");
-    BstInsert(tree, 6);
-    printf("Inserting 10.\n");
-    BstInsert(tree, 10);
-    printf("Inserting 4.\n");
-    BstInsert(tree, 4);
-    printf("Inserting 3.\n");
-    BstInsert(tree, 3);
-    printf("Inserting 9.\n");
-    BstInsert(tree, 9);
+    printf("Inserting %d.\n", a);
+    BstInsert(tree, &a);
+    printf("Inserting %d.\n", b);
+    BstInsert(tree, &b);
+    printf("Inserting %d.\n", c);
+    BstInsert(tree, &c);
+    printf("Inserting %d.\n", d);
+    BstInsert(tree, &d);
+    printf("Inserting %d.\n", e);
+    BstInsert(tree, &e);
+    
+    printf("Printing size: ");
+    printf("%lu.\n", BstSize(tree));
+    
+    printf("Removing %d\n", b);
+    BstRemove(tree, &b);
 
-    printf("Printing size %lu.\n", BstSize(tree));
+    printf("Printing size: ");
+    printf("%lu.\n", BstSize(tree));
+
 /*
 void BstDestroy(bst_t *bst);
 

@@ -21,7 +21,7 @@ size_t BstSize(const bst_t *bst);
 
 int BstIsEmpty(const bst_t *bst);
 
-void *BstFind(bst_t *bst, compare_func_t cmp_func, const void *data);
+void *BstFind(bst_t *bst, const void *data);
 
 int BstForEach(bst_t *bst, action_function_t action_func, void *param);
 

@@ -1,3 +1,10 @@
+/*
+Binary Search Tree implementaion.
+
+Alex Breger
+Reviwed: Ben Bortkevich 8.10.24
+*/
+
 #include <stdlib.h> /*calloc*/
 #include <stdio.h> /*fprintf*/
 #include "cyber:ds-binary_search_tree.h"
@@ -7,23 +14,12 @@ struct bst
     void* data;
     bst_t* left;
     bst_t* right;
-    action_function_t action_function;
     compare_func_t compare_function;    
 };
 
 typedef int (*action_function_t)(void *data, void *parameter);
 
 typedef int (*compare_func_t)(const void *data1, const void *data2);
-
-static bst_t* GoToMostLeftLeaf(bst_t* tree)
-{
-    if(NULL == tree->left && NULL == tree->right)
-    {
-        return tree;
-    }
-
-    GoToMostLeftLeaf(tree->left);
-}
 
 static bst_t* GoToMostRightLeaf(bst_t* tree)
 {
@@ -33,6 +29,17 @@ static bst_t* GoToMostRightLeaf(bst_t* tree)
     }
 
     GoToMostRightLeaf(tree->right);
+}
+
+void PrintTree(bst_t* tree)
+{
+    if(NULL == tree)
+    {
+        return;
+    }
+    printf(" %d\n", *(int*)tree->data);
+    PrintTree(tree->left);
+    PrintTree(tree->right);
 }
 
 bst_t *BstCreate(compare_func_t cmp_func)
@@ -47,7 +54,6 @@ bst_t *BstCreate(compare_func_t cmp_func)
     }
 
     bst->compare_function = cmp_func;
-    bst->action_function = NULL;
     bst->left = NULL;
     bst->right = NULL;
     bst->data = NULL;
@@ -56,6 +62,11 @@ bst_t *BstCreate(compare_func_t cmp_func)
 
 void BstDestroy(bst_t *bst)
 {
+    if(NULL == bst)
+    {
+        return;
+    }
+    
     if(NULL == bst->left && NULL == bst->right)
     {
         free(bst);
@@ -71,7 +82,6 @@ void BstDestroy(bst_t *bst)
 
 void BstRemove(bst_t *bst,const void *data)
 {
-    printf("in bst remove");
     bst_t* replacer_node;
     int compare_result;
 
@@ -80,28 +90,30 @@ void BstRemove(bst_t *bst,const void *data)
         return;
     }
     
-    printf("before compare");
     compare_result = bst->compare_function(bst->data, data);
 
     if(0 == compare_result)
     {
         if(NULL == bst->left && NULL == bst->right)
         {
-            free(bst);
-            bst = NULL;
+            bst->data = NULL;
         }
-        else if(bst->right)
+        else if(NULL == bst->right)
         {
-            replacer_node = GoToMostLeftLeaf(bst->right);
+            replacer_node = bst->left;
+        }
+        else if(NULL == bst->left)
+        {
+            replacer_node = bst->right;
         }
         else
         {
             replacer_node = GoToMostRightLeaf(bst->left);
         }
-
         bst->data = replacer_node->data;
+        bst->left = replacer_node->left;
+        bst->right = replacer_node->right;
         free(replacer_node);
-        replacer_node = NULL;
     } 
     else if(compare_result < 0)
     {
@@ -213,7 +225,17 @@ void *BstFind(bst_t *bst, const void *data)
 
 int BstForEach(bst_t *bst, action_function_t action_func, void *param)
 {
+    if(NULL == bst)
+    {
+        return 0;
+    }
+    
+    printf("%d\n",action_func(bst->data,param));
+    
+    BstForEach(bst->left, action_func, param);
+    BstForEach(bst->right, action_func, param);
 
+    return 1;
 }
 
 

@@ -1,12 +1,25 @@
+/*
+Binary Search Tree implementaion.
+
+Alex Breger
+Reviwed: Ben Bortkevich 8.10.24
+*/
+
 #include <stdio.h> /*printf*/
 #include "cyber:ds-binary_search_tree.h"
 
-typedef int (*action_function_t)(void *data, void *parameter);
+
+int Multiply(void *data, void *parameter)
+{
+    return *(int*)data * *(int*)parameter;
+}
 
 int CompareFunc(const void* data1, const void* data2)
 {
     return *(int*)data1 - *(int*)data2;
 }
+
+
 
 int main()
 {
@@ -15,12 +28,14 @@ int main()
     int c = 4;
     int d = 3;
     int e = 9;
+    int f = 2;
+
     compare_func_t CompareFunction = CompareFunc;
 
     printf("Creating BST\n");
     bst_t* tree = BstCreate(CompareFunction);
     
-    if(NULL == tree)
+    if(BstIsEmpty(tree))
     {
         fprintf(stderr, "Creation of BST failed.\n");
     }
@@ -28,6 +43,7 @@ int main()
     {
         printf("BST created.\n");
     }
+
     
     printf("Inserting %d.\n", a);
     BstInsert(tree, &a);
@@ -40,32 +56,48 @@ int main()
     printf("Inserting %d.\n", e);
     BstInsert(tree, &e);
     
+    if(BstIsEmpty(tree))
+    {
+        fprintf(stderr, "BST is empty after insertion.\n");
+    }
+    else
+    {
+        printf("BST insertion succeeded.\n");
+    }
+
     printf("Printing size: ");
     printf("%lu.\n", BstSize(tree));
     
+    printf("Printing the tree.\n");
+    PrintTree(tree);
+
     printf("Removing %d\n", b);
     BstRemove(tree, &b);
 
     printf("Printing size: ");
     printf("%lu.\n", BstSize(tree));
 
-/*
-void BstDestroy(bst_t *bst);
+    printf("Doing for each.\n");
+    BstForEach(tree,Multiply,&f);
 
-void BstRemove(bst_t *bst,const void *data);
+    printf("Printing the tree.\n");
+    PrintTree(tree);
 
-int BstInsert(bst_t *bst, void *data);
+    printf("Searching for %d\n", d);
+    printf("Should find %d, found %d\n",d,*(int*)BstFind(tree,&d));
+    
+    printf("Destroying BST\n");
+    BstDestroy(tree);
 
-size_t BstSize(const bst_t *bst);
-
-int BstIsEmpty(const bst_t *bst);
-
-void *BstFind(bst_t *bst, compare_func_t cmp_func, const void *data);
-
-int BstForEach(bst_t *bst, action_function_t action_func, void *param);
-
-*/
-
+    if(NULL == tree)
+    {
+        printf("Tree was destroyed :(\n");
+    }
+    else
+    {
+        printf("Tree lives forever.\n");
+    }
+    
     return 0;
 }
 

@@ -1,3 +1,11 @@
+/*
+Binary Search Tree implementaion.
+
+Alex Breger
+Reviwed: Ben Bortkevich 8.10.24
+*/
+
+
 #ifndef __BST_H__
 #define __BST_H__
 
@@ -10,6 +18,8 @@ typedef int (*action_function_t)(void *data, void *parameter);
 typedef int (*compare_func_t)(const void *data1, const void *data2);
 
 bst_t *BstCreate(compare_func_t cmp_func);
+
+void PrintTree(bst_t* tree);
 
 void BstDestroy(bst_t *bst);
 

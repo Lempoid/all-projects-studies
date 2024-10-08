@@ -17,10 +17,6 @@ struct bst
     compare_func_t compare_function;    
 };
 
-typedef int (*action_function_t)(void *data, void *parameter);
-
-typedef int (*compare_func_t)(const void *data1, const void *data2);
-
 static bst_t* GoToMostRightLeaf(bst_t* tree)
 {
     if(NULL == tree->left && NULL == tree->right)

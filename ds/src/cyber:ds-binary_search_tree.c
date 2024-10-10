@@ -19,7 +19,7 @@ struct bst
 
 static bst_t* GoToMostRightLeaf(bst_t* tree)
 {
-    if(NULL == tree->left && NULL == tree->right)
+    if(NULL == tree->right)
     {
         return tree;
     }
@@ -79,6 +79,7 @@ void BstDestroy(bst_t *bst)
 void BstRemove(bst_t *bst,const void *data)
 {
     bst_t* replacer_node;
+    bst_t* remember_left_tree;
     int compare_result;
 
     if(NULL == bst || NULL == bst->data)
@@ -105,6 +106,12 @@ void BstRemove(bst_t *bst,const void *data)
         else
         {
             replacer_node = GoToMostRightLeaf(bst->left);
+            if(NULL != replacer_node->left)
+            {
+                bst->data = replacer_node->data;
+                BstRemove(replacer_node,replacer_node->data);
+                return;
+            }
         }
         bst->data = replacer_node->data;
         bst->left = replacer_node->left;

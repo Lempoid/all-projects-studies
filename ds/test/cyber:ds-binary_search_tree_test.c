@@ -23,11 +23,11 @@ int CompareFunc(const void* data1, const void* data2)
 
 int main()
 {
-    int a = 6;
-    int b = 10;
-    int c = 4;
-    int d = 3;
-    int e = 9;
+    int a = 100;
+    int b = 200;
+    int c = 90;
+    int d = 95;
+    int e = 94;
     int f = 2;
 
     compare_func_t CompareFunction = CompareFunc;
@@ -72,7 +72,7 @@ int main()
     PrintTree(tree);
 
     printf("Removing %d\n", b);
-    BstRemove(tree, &b);
+    BstRemove(tree, &a);
 
     printf("Printing size: ");
     printf("%lu.\n", BstSize(tree));

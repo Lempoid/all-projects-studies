@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h> /*fprintf printf*/
 #include "ext2_Parsing.h"
 
 
@@ -14,7 +13,7 @@ int main(int argc, char *argv[])
     if (argc != 3)  /*Checks command line arguments*/
     {
         fprintf(stderr, "Usage: %s <disk_image> <file_path>\n", argv[0]);
-        exit(1);
+        return 1;
     }
 
     disk_name = argv[1];

@@ -1,26 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
+#include <stdio.h> /*frpintf*/
+#include <stdlib.h> /*free malloc*/
+#include <fcntl.h> /*open*/
+#include <unistd.h> /*ssize_t*/
+#include <string.h> /*strcmp strcpy strtok*/
 #include "ext2_Parsing.h"
 
-/*
-struct ext2_superblock {
-    size_t block_size;
-    size_t inodes_count;
-    size_t blocks_count;
-};
-
-struct ext2_group_desc {
-
-};
-
-struct ext2_inode {
-
-};
-*/
 struct fs_s
 {
   int file_descriptor;

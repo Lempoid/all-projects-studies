@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "gcc build ext2_Parsing",
+      "command": "gcc",
+      "args": [
+        "-ansi",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-g",
+        "-I${workspaceFolder}/include",
+        "${workspaceFolder}/src/ext2_Parsing.c",
+        "${workspaceFolder}/test/ext2_Parsing_test.c",
+        "-o",
+        "${workspaceFolder}/test/ext2_Parsing.out"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "gcc build ext2_Parsing_test",
+      "command": "gcc",
+      "args": [
+        "-ansi",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-g",
+        "-I${workspaceFolder}/include",
+        "${workspaceFolder}/src/ext2_Parsing.c",
+        "${workspaceFolder}/test/ext2_Parsing_test.c",
+        "-o",
+        "${workspaceFolder}/test/ext2_Parsing_test.out"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    }
+  ]
+}

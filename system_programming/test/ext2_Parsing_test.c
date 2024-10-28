@@ -7,17 +7,19 @@ int main(int argc, char *argv[])
 {
     const char *disk_name;
     const char *file_path;
+    const char *permissions;
     FS_t* fs;
     long inode_num;
 
-    if (argc != 3)  /*Checks command line arguments*/
+    if (argc != 4)  /*Checks command line arguments*/
     {
-        fprintf(stderr, "Usage: %s <disk_image> <file_path>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <disk_image> <file_path> <permissions>\n", argv[0]);
         return 1;
     }
 
     disk_name = argv[1];
     file_path = argv[2];
+    permissions = argv[3];
 
     printf("Opening disk: %s\n", disk_name);
     fs = FSOpen(disk_name);  /*Opens the file system*/
@@ -42,6 +44,9 @@ int main(int argc, char *argv[])
 
     printf("Printing contents of %s:\n", file_path);
     PrintFileContent(fs, inode_num);
+
+    printf("Changing permissions of %s:\n", file_path);
+    Chmode(fs, inode_num, (char*)permissions);
 
     FSClose(fs);
 

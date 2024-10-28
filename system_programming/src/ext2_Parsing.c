@@ -1,8 +1,9 @@
-#include <stdio.h> /*frpintf*/
+#include <stdio.h>  /*frpintf*/
 #include <stdlib.h> /*free malloc*/
-#include <fcntl.h> /*open*/
+#include <fcntl.h>  /*open read seek*/
 #include <unistd.h> /*ssize_t*/
 #include <string.h> /*strcmp strcpy strtok*/
+#include <math.h>   /*pow*/
 #include "ext2_Parsing.h"
 
 struct fs_s
@@ -34,7 +35,7 @@ FS_t *FSOpen(const char *disk_name)
     return NULL;
   }
 
-  file_system->file_descriptor = open(disk_name, O_RDONLY);
+  file_system->file_descriptor = open(disk_name, O_RDWR);
   if (-1 == file_system->file_descriptor)
   {
     free(file_system);
@@ -106,7 +107,7 @@ long GetInode(FS_t *file_system, const char *file_path)
   size_t inode_size;
   size_t path_length;
   size_t group_number;
-  size_t index_within_group;
+  size_t inode_index_within_group;
   size_t inode_block;
   size_t inode_offset_within_block;
   size_t seek_position;
@@ -147,9 +148,9 @@ long GetInode(FS_t *file_system, const char *file_path)
   while (NULL != current_directory)
   {
     group_number = (current_inode_number - 1) / inodes_per_group;
-    index_within_group = (current_inode_number - 1) % inodes_per_group;
+    inode_index_within_group = (current_inode_number - 1) % inodes_per_group;
 
-    seek_position = block_size + group_number * size_of_ext2_group_desc;
+    seek_position = block_size + (group_number * size_of_ext2_group_desc);
 
     if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
     {
@@ -165,8 +166,8 @@ long GetInode(FS_t *file_system, const char *file_path)
       return -1;
     }
 
-    inode_block = group_desc.bg_inode_table + (index_within_group * inode_size) / block_size;
-    inode_offset_within_block = (index_within_group * inode_size) % block_size;
+    inode_block = group_desc.bg_inode_table + (inode_index_within_group * inode_size) / block_size;
+    inode_offset_within_block = (inode_index_within_group * inode_size) % block_size;
 
     seek_position = inode_block * block_size + inode_offset_within_block;
 
@@ -247,19 +248,19 @@ void PrintFileContent(FS_t *file_system, long inode_num)
   size_t inodes_per_group;
   size_t inode_size;
   size_t group_number;
-  size_t index_within_group;
+  size_t inode_index_within_group;
   size_t inode_block;
   size_t inode_offset_within_block;
   size_t seek_position;
   ssize_t size_of_ext2_group_desc;
   ssize_t size_of_ext2_inode;
   size_t i;
-  size_t total_bytes_to_read;
+  size_t total_bytes_read;
   ssize_t bytes_to_read;
   int file_descriptor;
   struct ext2_inode current_inode;
   struct ext2_group_desc group_desc;
-  char *buffer_for_file_content;
+  char *buffer_for_file_content_per_block;
   char *buffer_for_whole_file;
 
   size_of_ext2_inode = sizeof(struct ext2_inode);
@@ -268,12 +269,12 @@ void PrintFileContent(FS_t *file_system, long inode_num)
   block_size = file_system->block_size;
   inodes_per_group = file_system->inodes_per_group;
   inode_size = file_system->inode_size;
-  total_bytes_to_read = 0;
+  total_bytes_read = 0;
 
   group_number = (inode_num - 1) / inodes_per_group;
-  index_within_group = (inode_num - 1) % inodes_per_group;
+  inode_index_within_group = (inode_num - 1) % inodes_per_group;
 
-  seek_position = block_size + group_number * size_of_ext2_group_desc;
+  seek_position = (group_number * size_of_ext2_group_desc) + block_size;
 
   if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
   {
@@ -287,10 +288,10 @@ void PrintFileContent(FS_t *file_system, long inode_num)
     return;
   }
 
-  inode_block = group_desc.bg_inode_table + (index_within_group * inode_size) / block_size;
-  inode_offset_within_block = (index_within_group * inode_size) % block_size;
+  inode_block = group_desc.bg_inode_table + (inode_index_within_group * inode_size) / block_size;
+  inode_offset_within_block = (inode_index_within_group * inode_size) % block_size;
 
-  seek_position = inode_block * block_size + inode_offset_within_block;
+  seek_position = (inode_block * block_size) + inode_offset_within_block;
 
   if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
   {
@@ -310,44 +311,145 @@ void PrintFileContent(FS_t *file_system, long inode_num)
     return;
   }
 
-  buffer_for_file_content = malloc(block_size);
+  buffer_for_file_content_per_block = malloc(block_size);
   buffer_for_whole_file = malloc(current_inode.i_size);
 
   for (i = 0; i < EXT2_NDIR_BLOCKS; ++i)
   {
-    if (0 != current_inode.i_block[i] && total_bytes_to_read < current_inode.i_size)
+    if (0 != current_inode.i_block[i] && total_bytes_read < current_inode.i_size)
     {
       seek_position = current_inode.i_block[i] * block_size;
-      if(-1 == lseek(file_descriptor, seek_position, SEEK_SET))
+      if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
       {
         fprintf(stderr, "Failed to seek to read location");
-        free(buffer_for_file_content);
+        free(buffer_for_file_content_per_block);
         free(buffer_for_whole_file);
         return;
       }
-      
+
       bytes_to_read = block_size;
 
-      if(total_bytes_to_read + bytes_to_read > current_inode.i_size)
+      if (total_bytes_read + bytes_to_read > current_inode.i_size)
       {
-        bytes_to_read = current_inode.i_size - total_bytes_to_read;
+        bytes_to_read = current_inode.i_size - total_bytes_read;
       }
 
-      if (bytes_to_read != read(file_descriptor, buffer_for_file_content, bytes_to_read))
+      if (bytes_to_read != read(file_descriptor, buffer_for_file_content_per_block, bytes_to_read))
       {
         fprintf(stderr, "Failed to read data");
-        free(buffer_for_file_content);
+        free(buffer_for_file_content_per_block);
         free(buffer_for_whole_file);
         return;
       }
 
-      memcpy(buffer_for_whole_file + total_bytes_to_read, buffer_for_file_content, bytes_to_read);
-      total_bytes_to_read += bytes_to_read;
+      memcpy(buffer_for_whole_file + total_bytes_read, buffer_for_file_content_per_block, bytes_to_read);
+      total_bytes_read += bytes_to_read;
     }
   }
 
   write(STDOUT_FILENO, buffer_for_whole_file, current_inode.i_size);
 
-  free(buffer_for_file_content);
+  free(buffer_for_file_content_per_block);
   free(buffer_for_whole_file);
+}
+
+int Chmode(FS_t *file_system, long inode_num, char *new_mode)
+{
+  size_t block_size;
+  size_t inodes_per_group;
+  size_t inode_size;
+  size_t group_number;
+  size_t inode_index_within_group;
+  size_t inode_block;
+  size_t inode_offset_within_block;
+  size_t seek_position;
+  ssize_t size_of_ext2_group_desc;
+  ssize_t size_of_ext2_inode;
+  size_t new_mode_string_length;
+  int file_descriptor;
+  struct ext2_inode current_inode;
+  struct ext2_group_desc group_desc;
+  unsigned int new_permission_bits;
+  char owner;
+  char group;
+  char others;
+  unsigned int file_type;
+  
+  size_of_ext2_inode = sizeof(struct ext2_inode);
+  size_of_ext2_group_desc = sizeof(struct ext2_group_desc);
+  file_descriptor = file_system->file_descriptor;
+  block_size = file_system->block_size;
+  inodes_per_group = file_system->inodes_per_group;
+  inode_size = file_system->inode_size;
+  new_mode_string_length = strlen(new_mode);
+
+  group_number = (inode_num - 1) / inodes_per_group;
+  inode_index_within_group = (inode_num - 1) % inodes_per_group;
+
+  seek_position = (group_number * size_of_ext2_group_desc) + block_size;
+
+  if (NULL == new_mode || 3 > new_mode_string_length)
+  {
+    fprintf(stderr, "Check that your mode is in the format xxx or yyyy, or if it is initialized");
+    return -1;
+  }
+
+  if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
+  {
+    fprintf(stderr, "Failed to seek to group descriptor");
+    return -1;
+  }
+
+  if (size_of_ext2_group_desc != read(file_descriptor, &group_desc, size_of_ext2_group_desc))
+  {
+    fprintf(stderr, "Failed to read group descriptor");
+    return -1;
+  }
+
+  inode_block = group_desc.bg_inode_table + (inode_index_within_group * inode_size) / block_size;
+  inode_offset_within_block = (inode_index_within_group * inode_size) % block_size;
+
+  seek_position = (inode_block * block_size) + inode_offset_within_block;
+
+  if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
+  {
+    fprintf(stderr, "Failed to seek to inode");
+    return -1;
+  }
+
+  if (size_of_ext2_inode != read(file_descriptor, &current_inode, size_of_ext2_inode))
+  {
+    fprintf(stderr, "Failed to read inode");
+    return -1;
+  }
+
+  file_type = current_inode.i_mode & ~0777;
+
+  owner = new_mode[0] - '0';
+  group = new_mode[1] - '0';
+  others = new_mode[2] - '0';
+
+  if (owner > 7 || group > 7 || others > 7)
+  {
+    fprintf(stderr, "Invalid permission values\n");
+    return -1;
+  }
+
+  new_permission_bits = (owner << 6) | (group << 3) | others;
+
+  current_inode.i_mode = file_type | new_permission_bits;
+
+  if (-1 == lseek(file_descriptor, seek_position, SEEK_SET))
+  {
+    fprintf(stderr, "Failed to seek to inode\n");
+    return -1;
+  }
+
+  if (size_of_ext2_inode != write(file_descriptor, &current_inode, size_of_ext2_inode))
+  {
+    fprintf(stderr, "Failed to write to inode\n");
+    return -1;
+  }
+
+  return 1;
 }

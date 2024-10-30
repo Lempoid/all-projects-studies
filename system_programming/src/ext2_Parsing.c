@@ -1,3 +1,11 @@
+/*
+EXT2 parser that finds a file and prints it.
+Can change permissions of RWX as well
+
+Author: Alex Breger
+Review: Elisheva Dori 22.10.24
+*/
+
 #include <stdio.h>  /*frpintf*/
 #include <stdlib.h> /*free malloc*/
 #include <fcntl.h>  /*open read seek*/

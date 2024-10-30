@@ -12,10 +12,10 @@
         "-Wextra",
         "-g",
         "-I${workspaceFolder}/include",
-        "${workspaceFolder}/src/ext2_Parsing.c",
-        "${workspaceFolder}/test/ext2_Parsing_test.c",
+        "${workspaceFolder}/src/authentication.c",
+        "${workspaceFolder}/test/authentication_test.c",
         "-o",
-        "${workspaceFolder}/test/ext2_Parsing.out"
+        "${workspaceFolder}/test/test.out"
       ],
       "options": {
         "cwd": "${workspaceFolder}"

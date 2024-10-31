@@ -9,14 +9,12 @@ int main()
 
     char *user_password = USER_PASSWORD;
     char *user_name = USER_NAME;
-    struct AuthManager *auth_manager;
 
     printf("Adding user");
-    auth_manager = AddUser(user_name, user_password);
+    AddUser(user_name, user_password);
     printf("Adding user");
-    auth_manager = AddUser(user_name, user_password);
+    AddUser(user_name, user_password);
 
-    
     /*
 
     int DeleteUser(struct AuthManager *auth_manager, char *user_name);

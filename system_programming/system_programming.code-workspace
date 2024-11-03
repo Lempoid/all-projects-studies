@@ -7,6 +7,11 @@
   "settings": {
     "files.exclude": {
       "**/.vscode": true
+    },
+    "files.associations": {
+      "string.h": "c",
+      "pam_misc.h": "c",
+      "_pam_macros.h": "c"
     }
   }
 }

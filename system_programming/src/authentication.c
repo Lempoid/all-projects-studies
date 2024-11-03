@@ -5,6 +5,9 @@ Best performance wasn't taken into consideration (That's why array and not dicti
 
 There is a chance I will use a file instead of a dictionary.
 */
+
+#define _XOPEN_SOURCE /* See feature_test_macros(7) */
+#include <unistd.h>
 #include <stdlib.h> /*FILE*/
 #include <stdio.h>  /*printf fprintf*/
 #include <crypt.h>  /*crypt*/
@@ -69,7 +72,7 @@ int DeleteUser(char *user_name)
     if (NULL == new_file)
     {
         perror("Can't open authentication file.\n");
-        close(file);
+        fclose(file);
         return 0;
     }
 
@@ -105,9 +108,8 @@ int Authenticate(char *user_name, char *password)
     char buffer[LINE_BUFFER];
     FILE *file = fopen(FILE_PATH, "r");
     char *encrypted_password;
-    char* user_in_file;
-    char* pass_in_file;
-    char orignal_line[LINE_BUFFER];
+    char *user_in_file;
+    char *pass_in_file;
 
     if (NULL == file)
     {
@@ -122,26 +124,29 @@ int Authenticate(char *user_name, char *password)
 
         return 0;
     }
-    
+
     encrypted_password = crypt(password, SALT);
-    
+
     while (NULL != fgets(buffer, LINE_BUFFER, file))
     {
-        buffer[strcspn(buffer,"\n")] = 0;
-        user_in_file = strtok( buffer,":");
-        if(NULL == user_in_file)
+        buffer[strcspn(buffer, "\n")] = 0;
+        user_in_file = strtok(buffer, ":");
+
+        /*if(NULL == user_in_file)
         {
             continue;
-        }
+        }*/
 
-        fprintf(name_and_pass, "%s:%s", user_name, encrypted_password);
-        if (0 == strcmp(buffer, name_and_pass))
+        pass_in_file = strtok(NULL, ":");
+
+        if (0 == strcmp(user_in_file, user_name) && 0 == strcmp(encrypted_password, pass_in_file))
         {
             printf("You are approved\n");
-            break;
+            fclose(file);
+            return 1;
         }
     }
 
-    close(file);
-    return 1;
+    fclose(file);
+    return 0;
 }

@@ -15,7 +15,10 @@
         "${workspaceFolder}/src/authentication.c",
         "${workspaceFolder}/test/authentication_test.c",
         "-o",
-        "${workspaceFolder}/test/test.out"
+        "${workspaceFolder}/test/test.out",
+        "-lcrypt",
+        "-lpam",
+        "-lpam_misc"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -42,7 +45,10 @@
         "${workspaceFolder}/src/ext2_Parsing.c",
         "${workspaceFolder}/test/ext2_Parsing_test.c",
         "-o",
-        "${workspaceFolder}/test/ext2_Parsing_test.out"
+        "${workspaceFolder}/test/ext2_Parsing_test.out",
+        "-lcrypt",
+        "-lpam",
+        "-lpam_misc"
       ],
       "options": {
         "cwd": "${workspaceFolder}"

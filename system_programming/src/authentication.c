@@ -132,11 +132,6 @@ int Authenticate(char *user_name, char *password)
         buffer[strcspn(buffer, "\n")] = 0;
         user_in_file = strtok(buffer, ":");
 
-        /*if(NULL == user_in_file)
-        {
-            continue;
-        }*/
-
         pass_in_file = strtok(NULL, ":");
 
         if (0 == strcmp(user_in_file, user_name) && 0 == strcmp(encrypted_password, pass_in_file))

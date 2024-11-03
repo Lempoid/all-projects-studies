@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
 {
 
     /*PAM*/
-
     pam_handle_t *pamh = NULL;
     int retval;
     const char *user = "nobody";
@@ -27,7 +26,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: check_user [username]\n");
         return 1;
     }
-
+    
     retval = pam_start("check_user", user, &conv, &pamh);
     if (PAM_SUCCESS == retval)
     {
@@ -57,7 +56,8 @@ int main(int argc, char *argv[])
     }
 
     /*NOT PAM*/
-    /* char *user_password = USER_PASSWORD;
+    /*
+     char *user_password = USER_PASSWORD;
      char *user_name = USER_NAME;
 
      printf("Adding user");
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
      DeleteUser(user_name);
 
-     Authenticate(user_name, "12");
+     Authenticate(user_name, "1234");
 
      */
     return 0;

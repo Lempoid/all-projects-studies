@@ -11,7 +11,12 @@
     "files.associations": {
       "string.h": "c",
       "pam_misc.h": "c",
-      "_pam_macros.h": "c"
+      "_pam_macros.h": "c",
+      "signal.h": "c",
+      "types.h": "c",
+      "stdio.h": "c",
+      "stdlib.h": "c",
+      "wait.h": "c"
     }
   }
 }

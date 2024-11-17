@@ -1,3 +1,12 @@
+"""
+Cloud service that calculates machines' cost.
+class Service holds the machines.
+class Machine holds machine metadata
+Author: Alex Breger
+Reviwed by: Ben Bortkevich
+
+"""
+
 import time
 import uuid
 from datetime import datetime

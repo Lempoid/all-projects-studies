@@ -1,6 +1,9 @@
-from operator import lshift
+"""
+Simple SLL and Node class
+Author: Alex Breger
+Reviwed by: Ben Bortkevich
 
-
+"""
 class Node:
     def __init__(self, value=0, next_node=None):
         self.__value = value

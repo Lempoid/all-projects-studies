@@ -1,3 +1,10 @@
+"""
+Simple Point class
+Author: Alex Breger
+Reviwed by: Ben Bortkevich
+
+"""
+
 from math import sqrt
 
 class Point:

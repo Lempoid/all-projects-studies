@@ -1,3 +1,10 @@
+"""
+Everything in a single file because the programs are small
+
+Author: Alex Breger
+Reviewd: Ben Bortkevich 13.11.24
+
+"""
 import string
 import pandas as pd
 
@@ -11,9 +18,12 @@ def create_files():
 
 
 def read_n_lines(number_of_lines):
+    lines = []
     with open("ex1.py", "r") as fp:
-        lines = fp.readlines(number_of_lines)
-        fp.close()
+        for i in range(number_of_lines):
+            lines.append(fp.readline())
+    fp.close()
+
     return lines
 
 
@@ -37,7 +47,6 @@ def present_csv(data):
           f"Min unvac age: {min_unvac_age}\n"
           f"Max unvac age: {max_unvac_age}\n"
           f"Avg hospitalisation time: {average_len_hospitalization}\n")
-
 
 # create_files()
 # print(read_n_lines(50))

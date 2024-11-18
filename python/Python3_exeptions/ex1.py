@@ -10,7 +10,6 @@ def ex5(password):
        if (8 >= len(password) and re.search("[a-z]", password)
             and re.search("[A-Z]", password) and re.search("[0-9]", password)
             and re.search("[@#%&]", password)):
-           1/0
            return 1
     except Exception as e:
         print(f"exception: {e}")

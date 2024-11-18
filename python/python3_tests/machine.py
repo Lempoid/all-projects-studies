@@ -133,15 +133,15 @@ for machine_id in machines_list:
     service.insert_machine(machine_id)
     service.turn_machine_off_on(machine_id.uid)
 
-time.sleep(10)
+time.sleep(2)
 
 machineE = Machine(2)
 service.insert_machine(machineE)
 service.turn_machine_off_on(machineE.uid)
 
-time.sleep(10)
+time.sleep(2)
 
 service.turn_machine_off_on(machineB.uid)
-time.sleep(10)
+time.sleep(2)
 
 print(service.calculate_cost())

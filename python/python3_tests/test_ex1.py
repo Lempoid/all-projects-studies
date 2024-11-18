@@ -1,3 +1,10 @@
+"""
+Unittest for bank class.
+Author: Alex Breger
+Reviewed by: Hananya Templeman
+"""
+
+
 import unittest
 
 from ex1 import BankAccount
@@ -27,5 +34,6 @@ class TestBankAccount(unittest.TestCase):
 
     def tearDown(self):
         del self.account
+
 if __name__ == '__main__':
     unittest.main()

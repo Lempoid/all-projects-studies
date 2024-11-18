@@ -1,4 +1,9 @@
-from os import access
+"""
+Pyetest for bank class.
+Author: Alex Breger
+Reviewed by: Hananya Templeman
+"""
+
 
 import pytest
 from ex1 import BankAccount

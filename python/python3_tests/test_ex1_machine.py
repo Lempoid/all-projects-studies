@@ -1,8 +1,16 @@
+"""
+Unittest for machine service.
+Author: Alex Breger
+Reviewed by: Hananya Templeman
+"""
+
+
+
 from datetime import datetime
 
 import pytest
 
-from machine import Machine, Service, machine_id
+from machine import Machine, Service
 
 
 @pytest.fixture

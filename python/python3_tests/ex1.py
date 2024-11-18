@@ -1,3 +1,8 @@
+"""
+Class for test exercise.
+Author: Alex Breger
+Reviewed by: Hananya Templeman
+"""
 
 class BankAccount:
     def __init__(self,id):

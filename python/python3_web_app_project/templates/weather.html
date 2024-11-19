@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskWeather</title>
+    <style>
+        .weather {
+            padding: 20px;
+            margin: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .location {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        .date {
+            color: #666;
+            font-style: italic;
+        }
+        .temperature {
+            margin: 10px 0;
+        }
+        .humidity {
+            color: #555;
+        }
+        .description {
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <h1>FlaskWeather</h1>
+    <hr>
+    <div class="content">
+        <form method="post">
+            <p>
+                <b><label for="content">Weather content</label></b>
+            </p>
+            <p>
+                <input type="text" name="content" placeholder="Enter city name" required>
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+        <hr>
+        {% for day in days %}
+            <div class="weather">
+                <p class="location">{{ day.city_name }}, {{ day.country }}</p>
+                <p class="date">{{ day.date }}</p>
+                <div class="temperature">
+                    <p>Current Temperature: {{ day.temperature }}°C</p>
+                    <p>Day: {{ day.day_temp }}°C / Night: {{ day.night_temp }}°C</p>
+                </div>
+                <p class="humidity">Humidity: {{ day.humidity }}%</p>
+                <p class="description">{{ day.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

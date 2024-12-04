@@ -1,3 +1,7 @@
+/*
+Reviewed: Ben Bortkevich
+Author: Alex Breger
+*/
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -42,7 +46,7 @@ int main()
         return -1;
     }
 
-    printf("Recieved message from IP: %s and port: %i\n", inet_ntoa(server_addr.sin_addr), htons(server_addr.sin_port));
+    printf("Recieved message from IP: %s and port: %i\n", inet_ntoa(server_addr.sin_addr), ntohs(server_addr.sin_port));
     
     printf("Server response: %s", server_message);
 

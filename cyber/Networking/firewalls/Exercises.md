@@ -71,6 +71,7 @@ Add rules to iptables:
 ```bash
 sudo iptables -A INPUT -p tcp -s 10.10.1.33 --dport 500 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 500 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 500 -j DROP
 ```
 
 Restart services:

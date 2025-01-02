@@ -11,5 +11,6 @@
 #define BUFFER_SIZE 1024
 
 void run_server();
+void set_up_route_to_internet();
 
 #endif /*SERVER_2_H*/

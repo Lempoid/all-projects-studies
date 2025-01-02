@@ -26,7 +26,7 @@ void run_client()
     server_address.sin_port = htons(PORT);
     server_address.sin_addr.s_addr = inet_addr("192.168.57.1");
 
-    if (0 > (client_fd = socket(AF_INET, SOCK_STREAM, 0)))
+    if ((client_fd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
         fprintf(stderr, "Couldn't create client socket\n");
         tear_down_tun_interface(tun_name);
@@ -34,27 +34,33 @@ void run_client()
         return;
     }
 
-    if (0 > connect(client_fd, (struct sockaddr *)&server_address, sizeof(server_address)))
-    {
-        fprintf(stderr, "Couldn't connect to server\n");
-        tear_down_tun_interface(tun_name);
-        close(tun_fd);
-        close(client_fd);
-        return;
-    }
+    system("sudo ip addr flush dev tun0");
+    system("sudo ip route flush dev tun0");
+    system("sudo ip route add 10.0.0.0/24 dev tun0");
+    system("sudo ip route add 192.168.57.1 via 192.168.57.1 dev enp0s3");
+    system("sudo ip route add default dev tun0");
+    
+    system("sysctl -w net.ipv4.ip_forward=1");
+    system("iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE");
+
+    system("iptables -I FORWARD 1 -i tun0 -m state --state RELATED,ESTABLISHED -j ACCEPT");
+    system("iptables -I FORWARD 1 -o tun0 -j ACCEPT");
+    
 
     while (1)
     {
-        int nread;
-
-        if (0 < (nread = read(tun_fd, buffer, sizeof(buffer))))
+        socklen_t addr_len;
+        int nread = read(tun_fd, buffer, sizeof(buffer));
+        if (nread > 0)
         {
-            send(client_fd, buffer, nread, 0);
+            sendto(client_fd, buffer, nread, 0, (struct sockaddr *)&server_address, sizeof(server_address));
         }
 
-        if (0 > (bytes_received = recv(client_fd, buffer, sizeof(buffer), 0)))
+        addr_len = sizeof(server_address);
+        bytes_received = recvfrom(client_fd, buffer, sizeof(buffer), 0, (struct sockaddr *)&server_address, &addr_len);
+        if (bytes_received > 0)
         {
-            write(tun_fd, buffer, (size_t)bytes_received);
+            write(tun_fd, buffer, bytes_received);
         }
     }
 

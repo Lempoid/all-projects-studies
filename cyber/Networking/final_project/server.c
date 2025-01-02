@@ -185,10 +185,10 @@ void cleanup_when_sig_exit()
 
 int main()
 {
-    int fd, nbytes;
+    int tun_fd, nbytes;
     char buf[BUFFER_SIZE];
 
-    fd = open_tun("tun0");
+    tun_fd = open_tun("tun0");
 
     // ifconfig();
     setup_route_table();
@@ -231,7 +231,7 @@ int main()
                 break;
             }
 
-            encrypt(tun_buf, udp_buf, r);
+            //encrypt(tun_buf, udp_buf, r);
             printf("Writing to UDP %d bytes ...\n", r);
 
             r = sendto(udp_fd, udp_buf, r, 0, (const struct sockaddr *)&client_addr, client_addrlen);
@@ -251,7 +251,7 @@ int main()
                 break;
             }
 
-            decrypt(udp_buf, tun_buf, r);
+            //decrypt(udp_buf, tun_buf, r);
             printf("Writing to tun %d bytes ...\n", r);
 
             r = write(tun_fd, tun_buf, r);

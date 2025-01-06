@@ -33,13 +33,13 @@ void run_client()
         close(tun_fd);
         return;
     }
-
+/*
     system("sudo ip addr flush dev tun0");
     system("sudo ip route flush dev tun0");
     system("sudo ip route add 10.0.0.0/24 dev tun0");
     system("sudo ip route add 192.168.57.1 via 192.168.57.1 dev enp0s3");
     system("sudo ip route add default dev tun0");
-    
+    */
     system("sysctl -w net.ipv4.ip_forward=1");
     system("iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE");
 

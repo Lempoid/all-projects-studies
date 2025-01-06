@@ -1,0 +1,1 @@
+To know that this vulnerability existed we could check WCE of MITRE for known software vulnerabilities, to do a proper code review and use tools to check the code.

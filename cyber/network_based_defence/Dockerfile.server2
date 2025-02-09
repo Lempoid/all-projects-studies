@@ -1,0 +1,7 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY server2.py .
+
+CMD ["python", "server2.py"]

@@ -1,0 +1,1 @@
+To brute force with hydra, knowing a user name we do: `hydra -l user_name -P /path/to/wordlist.txt 192.168.1.100 ssh`

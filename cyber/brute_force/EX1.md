@@ -1,0 +1,2 @@
+1) The problem with the code is that it will go a directory and then run the make file with the privilages of the one who runs the `system` command. The issue is that an attacker can plant a malicious MakeFile which can contain shell commands that will be executed.
+An attacker might change the `make` command in the system to run as something else.

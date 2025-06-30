@@ -39,7 +39,6 @@
 ehthumbs.db
 Thumbs.db
 */makefile
-system_programming/.vscode/tasks.json
 
 # Local binaries
 system_programming/**/dumb*

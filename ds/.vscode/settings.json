@@ -10,6 +10,6 @@
         "cyber-ds-sorts_ex2.h": "c",
         "pointers-part_2_ex1.h": "c",
         "recursion_ex4.h": "c",
-        "cyber:ds-binary_search_tree.h": "c"
+        "cyber_ds-binary_search_tree.h": "c"
     }
 }

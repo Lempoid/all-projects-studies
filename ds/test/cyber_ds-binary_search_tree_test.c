@@ -6,7 +6,7 @@ Reviwed: Ben Bortkevich 8.10.24
 */
 
 #include <stdio.h> /*printf*/
-#include "cyber:ds-binary_search_tree.h"
+#include "cyber_ds-binary_search_tree.h"
 
 
 int Multiply(void *data, void *parameter)

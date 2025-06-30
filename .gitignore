@@ -40,3 +40,12 @@ ehthumbs.db
 Thumbs.db
 */makefile
 system_programming/.vscode/tasks.json
+
+# Local binaries
+system_programming/**/dumb*
+system_programming/**/ping
+*/main
+*.a
+# Python cache
+__pycache__/
+*.pyc

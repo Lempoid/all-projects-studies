@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "client.h": "c",
-        "netdb.h": "c",
-        "tun.h": "c",
-        "server.h": "c"
-    }
-}

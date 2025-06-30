@@ -44,6 +44,10 @@ system_programming/.vscode/tasks.json
 # Local binaries
 system_programming/**/dumb*
 system_programming/**/ping
+system_programming/**/fooer.out
+system_programming/**/dumb1
+system_programming/**/dumb2
+system_programming/**/res
 */main
 *.a
 # Python cache

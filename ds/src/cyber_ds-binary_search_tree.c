@@ -7,7 +7,7 @@ Reviwed: Ben Bortkevich 8.10.24
 
 #include <stdlib.h> /*calloc*/
 #include <stdio.h> /*fprintf*/
-#include "cyber:ds-binary_search_tree.h"
+#include "cyber_ds-binary_search_tree.h"
 
 struct bst
 {

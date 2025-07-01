@@ -5,6 +5,7 @@ Reviewed: Ben Bortkevich
 """
 
 from flask import Flask, render_template, request, url_for, redirect
+import os
 import requests
 from pymongo import MongoClient
 from datetime import datetime
@@ -19,8 +20,12 @@ if weather_col.count_documents({}) > 0:
 
 app = Flask(__name__)
 
-SECRET_KEY = 'adb40c50db0c680fe4c74798ea46fb62'
-API_CALL = 'http://api.openweathermap.org/data/2.5/forecast?q={}&appid={}&units=metric'
+# The API key should ideally be provided via an environment variable
+# to avoid committing secrets to source control.
+SECRET_KEY = os.getenv("OPENWEATHER_KEY", "")
+API_CALL = (
+    "http://api.openweathermap.org/data/2.5/forecast?q={}&appid={}&units=metric"
+)
 
 
 def get_api_data(city_name):
@@ -77,5 +82,6 @@ def weather():
     return render_template('weather.html', days=all_weather_info)
 
 
-if __name__ == '_main_':
+if __name__ == "__main__":
     app.run(debug=True)
+

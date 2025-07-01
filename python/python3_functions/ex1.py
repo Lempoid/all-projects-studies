@@ -1,10 +1,4 @@
-"""
-Everything is done in one file as the programs are short.
-
-Author: Alex Breger
-Reviewed: Ben Bortkevich
-
-"""
+"""Assorted small function examples."""
 
 def ex1(given_list, words):
     given_list = list(filter(lambda word: word not in words, given_list))
@@ -84,14 +78,14 @@ def ex7(credit_card_number):
         if i % 2 == 0:
             if list_of_numbers[i] * 2 > 9:
                 list_of_numbers[i] = list_of_numbers[i] * 2 - 9
-    print(sum(list_of_numbers))
     return sum(list_of_numbers) % 10 == 0
 
 
-print(ex1(["red", "yellow", "black"], ["red", "yellow"]))
-print(ex2(["123", "515", "333", "1"]))
-print(ex3([-2, -4, 5, 6]))
-print(ex4([2, 4, 7, 5]))
-print(ex5({"apple": 10, "orange": 20, "avocado": 5}))
-print(ex6("שלום"))
-print(ex7(6011514433546201))
+if __name__ == "__main__":  # simple demonstration
+    print(ex1(["red", "yellow", "black"], ["red", "yellow"]))
+    print(ex2(["123", "515", "333", "1"]))
+    print(ex3([-2, -4, 5, 6]))
+    print(ex4([2, 4, 7, 5]))
+    print(ex5({"apple": 10, "orange": 20, "avocado": 5}))
+    print(ex6("שלום"))
+    print(ex7(6011514433546201))
